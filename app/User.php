@@ -5,10 +5,12 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use HasPushSubscriptions;
 
     protected $table ="members";
     public $timestamps = false;

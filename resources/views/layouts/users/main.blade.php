@@ -17,7 +17,7 @@
  @include("layouts.users.js")
 
 @yield("script")
-
+ <script src="{{asset("js/enable-push.js")}}"></script>
 </body>
 
  </html>

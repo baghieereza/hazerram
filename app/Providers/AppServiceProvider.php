@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      *
+     * @param \Illuminate\Contracts\Auth\Access\Gate $gate
+     *
      * @return void
      */
     public function boot(GateContract $gate)
