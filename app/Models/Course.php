@@ -1,32 +1,35 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class CourseTime
- *
- * @package \App\Models
- */
 class Course extends Model
 {
-
     protected $table = 'course';
-    protected $fillable = [
-        'name', 'class_id', 'teacher_id', 'level_id', 'year_id', 'start_session', 'end_session', 'status',
-    ];
 
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function teacher()
+    public function get_course_time()
     {
-        return $this->hasOne(User::class, 'teacher_id', 'id');
+        return $this->hasMany('App\CourseTime','course_id');
     }
 
+    public function get_level()
+    {
+        return $this->belongsTo('App\Level','level_id');
+    }
 
+    public function get_course_students()
+    {
+        return $this->hasMany('App\CourseStudent','course_id');
+    }
 
+    public function get_class()
+    {
+        return $this->belongsTo('App\Classes','class_id');
+    }
+
+    public function get_students()
+    {
+        return $this->belongsToMany('App\User')->using('App\CourseStudent');
+    }
 }

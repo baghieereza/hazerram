@@ -1,29 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class Classes
- *
- * @package \App\Models
- */
 class Classes extends Model
 {
-
     protected $table = 'class';
-    protected $fillable = [
-        'name', 'school_id', 'code', 'level', 'status', 'expireDate'
-    ];
 
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function school()
+    public function get_school()
     {
-        return $this->hasOne(S::class, 'teacher_id', 'id');
+        return $this->belongsTo('App\School','school_id');
     }
 }
