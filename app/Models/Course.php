@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,26 +10,29 @@ class Course extends Model
 
     public function get_course_time()
     {
-        return $this->hasMany('App\CourseTime','course_id');
+        return $this->hasMany('App\CourseTime', 'course_id');
     }
 
     public function get_level()
     {
-        return $this->belongsTo('App\Level','level_id');
+        return $this->belongsTo('App\Level', 'level_id');
     }
 
     public function get_course_students()
     {
-        return $this->hasMany('App\CourseStudent','course_id');
+        return $this->hasMany('App\CourseStudent', 'course_id');
     }
 
-    public function get_class()
+    public function  classes()
     {
-        return $this->belongsTo('App\Classes','class_id');
+        return $this->belongsTo('App\Models\Classes', 'class_id');
     }
 
-    public function get_students()
+    public function students()
+
     {
-        return $this->belongsToMany('App\User')->using('App\CourseStudent');
+        return $this->belongsToMany(User::class, CourseStudent::class , 'course_id' , 'id');
     }
+
+
 }

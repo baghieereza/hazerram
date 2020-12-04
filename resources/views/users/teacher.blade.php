@@ -24,21 +24,21 @@
                                                         <div class="media text-center">
                                                             <i class="icon-book menu-icon"></i>
                                                             <div class="media-body">
-                                                                <h6 class="mb-1 mr-2"> {{$course_time->get_course->name}} </h6>
+                                                                <h6 class="mb-1 mr-2"> {{$course_time->course->name}} </h6>
                                                                 <p class="mb-0 text-muted">
-                                                                    پایه ی {{$course_time->get_course->get_level->name}} -
+                                                                    پایه ی {{$course_time->course->level->name}} -
                                                                 </p>
                                                             </div>
                                                             <div class="media-body">
                                                                 <h6 class="mb-1 mr-2"> ساعت اول </h6>
                                                                 <p class="mb-0 text-muted">
-                                                                    {{$course_time->get_course->end_session}} - {{$course_time->get_course->start_session}}
+                                                                    {{$course_time->course->end_session}} - {{$course_time->course->start_session}}
                                                                 </p>
                                                             </div>
                                                             <div class="media-body">
                                                                 <h6 class="mb-1 mr-2"> تعداد<small> دانش آموز</small></h6>
                                                                 <p class="mb-0 text-muted">
-                                                                    {{$course_time->get_course->get_course_students->count()}}
+                                                                    {{$course_time->course->course_students->count()}}
                                                                 </p>
                                                             </div>
                                                             <div class="media-body">
@@ -92,9 +92,9 @@
                                     @foreach($week_course_times as $week_course_time)
                                         <tr>
                                         <td>{{$i}}</td>
-                                        <td>{{$week_course_time->get_course->name}}</td>
-                                        <td>{{$week_course_time->get_course->end_session}} - {{$week_course_time->get_course->start_session}}</td>
-                                        <td>{{$week_course_time->get_course->get_class->get_school->name}}</td>
+                                        <td>{{$week_course_time->course->name}}</td>
+                                        <td>{{$week_course_time->course->end_session}} - {{$week_course_time->course->start_session}}</td>
+                                        <td>{{$week_course_time->course->classes->school->name}}</td>
                                         <td>دهم</td>
                                         <td>
                                             @if (now()->toDateTime() < $week_course_time->end_date)

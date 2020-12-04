@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Course;
+use App\Models\Course;
 use Carbon\Carbon;
-use App\CourseTime;
+use App\Models\CourseTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -28,8 +28,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('isTeacher')) {
-            $course_times = CourseTime::with('get_course')->whereHas('get_course',function ($q){
+
+          if (Gate::allows('isTeacher')) {
+              $course_times = CourseTime::with('course')->whereHas('course',function ($q){
                 $q->where('teacher_id',auth()->id());
             })->whereDate('start_date','=',now()->toDate())->get();
 
@@ -37,7 +38,7 @@ class HomeController extends Controller
             $now = Carbon::now();
             $start = $now->startOfWeek(Carbon::SATURDAY)->toDate();
             $end = $now->endOfWeek(Carbon::WEDNESDAY)->toDate();
-            $week_course_times = CourseTime::with('get_course')->whereHas('get_course',function ($q){
+            $week_course_times = CourseTime::with('course')->whereHas('course',function ($q){
                 $q->where('teacher_id',auth()->id());
             })->whereBetween('start_date',[$start,$end])->get();
 
@@ -53,7 +54,7 @@ class HomeController extends Controller
         }
         if (Gate::allows('isStudent')) {
 
-            $course_times = CourseTime::with('get_course')->whereHas('get_course',function ($q){
+            $course_times = CourseTime::with('course')->whereHas('course',function ($q){
                 $q->where('teacher_id',auth()->id());
             })->whereDate('start_date','=',now()->toDate())->get();
 
@@ -61,7 +62,7 @@ class HomeController extends Controller
             $now = Carbon::now();
             $start = $now->startOfWeek(Carbon::SATURDAY)->toDate();
             $end = $now->endOfWeek(Carbon::WEDNESDAY)->toDate();
-            $week_course_times = CourseTime::with('get_course')->whereHas('get_course',function ($q){
+            $week_course_times = CourseTime::with('course')->whereHas('course',function ($q){
                 $q->where('teacher_id',auth()->id());
             })->whereBetween('start_date',[$start,$end])->get();
             return view('users.student');

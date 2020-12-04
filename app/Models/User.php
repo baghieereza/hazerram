@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,7 +12,7 @@ class User extends Authenticatable
     use Notifiable;
     use HasPushSubscriptions;
 
-    protected $table ="members";
+    protected $table = "members";
 //    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
@@ -41,8 +41,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function get_courses()
+    public function courses()
     {
-        return $this->belongsToMany('App\Course')->using('App\CourseStudent');
+        return $this->belongsToMany(Course::class, CourseStudent::class, "student_id", 'id')->using('App\CourseStudent');
     }
 }
