@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\helper;
-use App\Notifications\InvoicePaid;
+use App\Course;
+use Carbon\Carbon;
+use App\CourseTime;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class HomeController extends Controller
@@ -23,15 +24,26 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return void
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
     public function index()
     {
-        helper::sendSMS('teacher', 'ریاضی 1', 'شهید مفتح', 'https://link.com');
-        return view('home');
-
         if (Gate::allows('isTeacher')) {
-            return view('users.teacher');
+            $course_times = CourseTime::with('get_course')->whereHas('get_course',function ($q){
+                $q->where('teacher_id',auth()->id());
+            })->whereDate('start_date','=',now()->toDate())->get();
+
+
+            $now = Carbon::now();
+            $start = $now->startOfWeek(Carbon::SATURDAY)->toDate();
+            $end = $now->endOfWeek(Carbon::WEDNESDAY)->toDate();
+            $week_course_times = CourseTime::with('get_course')->whereHas('get_course',function ($q){
+                $q->where('teacher_id',auth()->id());
+            })->whereBetween('start_date',[$start,$end])->get();
+
+
+
+            return view('users.teacher',compact('course_times','week_course_times'));
         }
         if (Gate::allows('isManager')) {
             return view('users.manager');
@@ -40,9 +52,25 @@ class HomeController extends Controller
             return view('users.admin');
         }
         if (Gate::allows('isStudent')) {
+
+            $course_times = CourseTime::with('get_course')->whereHas('get_course',function ($q){
+                $q->where('teacher_id',auth()->id());
+            })->whereDate('start_date','=',now()->toDate())->get();
+
+
+            $now = Carbon::now();
+            $start = $now->startOfWeek(Carbon::SATURDAY)->toDate();
+            $end = $now->endOfWeek(Carbon::WEDNESDAY)->toDate();
+            $week_course_times = CourseTime::with('get_course')->whereHas('get_course',function ($q){
+                $q->where('teacher_id',auth()->id());
+            })->whereBetween('start_date',[$start,$end])->get();
             return view('users.student');
         }
+    }
 
-
+    public function logout()
+    {
+        auth()->logout();
+        return redirect('/');
     }
 }

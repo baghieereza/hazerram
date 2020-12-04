@@ -3,7 +3,7 @@
     <img class="img-sm rounded-circle"
          src="https://farm3.staticflickr.com/2906/14387855603_f4c0891db6_o.jpg" alt="">
     <div class="mr-1">
-        <b class="mr-1">سعید امان ابادی </b><small class="mr-1"> (مدیر) </small>
+        <b class="mr-1">{{auth()->user()->name}} </b><small class="mr-1"> ({{auth()->user()->role}}) </small>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-center ltr" style="direction: ltr">
         <ul class="navbar-nav">

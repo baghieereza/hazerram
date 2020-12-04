@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasPushSubscriptions;
 
     protected $table ="members";
-    public $timestamps = false;
+//    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -40,4 +40,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function get_courses()
+    {
+        return $this->belongsToMany('App\Course')->using('App\CourseStudent');
+    }
 }

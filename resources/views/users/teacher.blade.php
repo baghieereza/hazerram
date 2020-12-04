@@ -17,119 +17,40 @@
                                     </div>
                                     <hr>
                                     <div id="dragula-left" class="py-2">
-                                        <div class="card rounded border mb-2">
-                                            <div class="card-body p-3">
-                                                <div class="media text-center">
-                                                    <i class="icon-book menu-icon"></i>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> ریاضی 2 </h6>
-                                                        <p class="mb-0 text-muted">
-                                                            پایه ی یازدهم -
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> ساعت اول </h6>
-                                                        <p class="mb-0 text-muted">
-                                                            7:30 - 9:30
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> تعداد<small> دانش آموز</small></h6>
-                                                        <p class="mb-0 text-muted">
-                                                            23
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <i class="icon-ban " style="color: red"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card rounded border mb-2">
-                                            <div class="card-body p-3">
-                                                <div class="media text-center">
-                                                    <i class="icon-book menu-icon"></i>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> ریاضی 2 </h6>
-                                                        <p class="mb-0 text-muted">
-                                                            پایه ی یازدهم -
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> ساعت اول </h6>
-                                                        <p class="mb-0 text-muted">
-                                                            7:30 - 9:30
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> تعداد<small> دانش آموز</small></h6>
-                                                        <p class="mb-0 text-muted">
-                                                            23
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <i class="icon-ban " style="color: red"></i>
+                                        @if (!$course_times->isEmpty())
+                                            @foreach($course_times as $course_time)
+                                                <div class="card rounded border mb-2">
+                                                    <div class="card-body p-3">
+                                                        <div class="media text-center">
+                                                            <i class="icon-book menu-icon"></i>
+                                                            <div class="media-body">
+                                                                <h6 class="mb-1 mr-2"> {{$course_time->get_course->name}} </h6>
+                                                                <p class="mb-0 text-muted">
+                                                                    پایه ی {{$course_time->get_course->get_level->name}} -
+                                                                </p>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <h6 class="mb-1 mr-2"> ساعت اول </h6>
+                                                                <p class="mb-0 text-muted">
+                                                                    {{$course_time->get_course->end_session}} - {{$course_time->get_course->start_session}}
+                                                                </p>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <h6 class="mb-1 mr-2"> تعداد<small> دانش آموز</small></h6>
+                                                                <p class="mb-0 text-muted">
+                                                                    {{$course_time->get_course->get_course_students->count()}}
+                                                                </p>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <i class="icon-ban " style="color: red"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="card rounded border mb-2">
-                                            <div class="card-body p-3">
-                                                <div class="media text-center">
-                                                    <i class="icon-book menu-icon"></i>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> ریاضی 2 </h6>
-                                                        <p class="mb-0 text-muted">
-                                                            پایه ی یازدهم -
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> ساعت اول </h6>
-                                                        <p class="mb-0 text-muted">
-                                                            7:30 - 9:30
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> تعداد<small> دانش آموز</small></h6>
-                                                        <p class="mb-0 text-muted">
-                                                            23
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <i class="icon-ban " style="color: red"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card rounded border mb-2">
-                                            <div class="card-body p-3">
-                                                <div class="media text-center">
-                                                    <i class="icon-book menu-icon"></i>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> ریاضی 2 </h6>
-                                                        <p class="mb-0 text-muted">
-                                                            پایه ی یازدهم -
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> ساعت اول </h6>
-                                                        <p class="mb-0 text-muted">
-                                                            7:30 - 9:30
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h6 class="mb-1 mr-2"> تعداد<small> دانش آموز</small></h6>
-                                                        <p class="mb-0 text-muted">
-                                                            23
-                                                        </p>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <i class="icon-ban " style="color: red"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                            @endforeach
+                                        @else
+                                            برای امروز کلاسی ندارید.
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -165,47 +86,28 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ریاضی 2</td>
-                                        <td>7:30 - 9:30</td>
-                                        <td>هنرستان امام</td>
+                                    @php
+                                        $i = 1;
+                                    @endphp
+                                    @foreach($week_course_times as $week_course_time)
+                                        <tr>
+                                        <td>{{$i}}</td>
+                                        <td>{{$week_course_time->get_course->name}}</td>
+                                        <td>{{$week_course_time->get_course->end_session}} - {{$week_course_time->get_course->start_session}}</td>
+                                        <td>{{$week_course_time->get_course->get_class->get_school->name}}</td>
                                         <td>دهم</td>
                                         <td>
-                                            <div class="badge badge-success badge-fw">در حال برگذاری</div>
+                                            @if (now()->toDateTime() < $week_course_time->end_date)
+                                                <div class="badge badge-success badge-fw">در حال برگذاری</div>
+                                            @else
+                                                <div class="badge badge-danger badge-fw">گذشته</div>
+                                            @endif
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ریاضی 2</td>
-                                        <td>7:30 - 9:30</td>
-                                        <td>هنرستان امام</td>
-                                        <td>دهم</td>
-                                        <td>
-                                            <div class="badge badge-success badge-fw">در حال برگذاری</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ریاضی 2</td>
-                                        <td>7:30 - 9:30</td>
-                                        <td>هنرستان امام</td>
-                                        <td>دهم</td>
-                                        <td>
-                                            <div class="badge badge-success badge-fw">در حال برگذاری</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ریاضی 2</td>
-                                        <td>7:30 - 9:30</td>
-                                        <td>هنرستان امام</td>
-                                        <td>دهم</td>
-                                        <td>
-                                            <div class="badge badge-success badge-fw">در حال برگذاری</div>
-                                        </td>
-                                    </tr>
-
+                                        @php
+                                            $i += 1;
+                                        @endphp
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -284,3 +186,48 @@
     </div>
 
 @endsection()
+
+@section('script')
+    <script>
+        if ($("#morris-dashboard-bar-chart").length) {
+            Morris.Bar({
+                element: 'morris-dashboard-bar-chart',
+                barColors: ['#fe946b', '#b663e6'],
+                barGap: 9,
+                barSizeRatio: 0.55,
+                hideHover: 'always',
+                grid: false,
+                data: [{
+                    y: 'a',
+                    a: 30,
+                    b: 40
+                },
+                    {
+                        y: 'b',
+                        a: 55,
+                        b: 65
+                    },
+                    {
+                        y: 'c',
+                        a: 60,
+                        b: 70
+                    },
+                    {
+                        y: 'd',
+                        a: 55,
+                        b: 45
+                    },
+                    {
+                        y: 'e',
+                        a: 40,
+                        b: 45
+                    }
+                ],
+                xkey: 'y',
+                ykeys: ['a', 'b'],
+                axes: 'x',
+                labels: ['Series A', 'Series B']
+            });
+        }
+    </script>
+@endsection

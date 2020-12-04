@@ -3,6 +3,7 @@
 
 
 @section('content')
+
     <div class="main-panel" style="width: 100%">
         <div class="content-wrapper">
             <div class="row">

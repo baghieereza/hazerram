@@ -8,7 +8,6 @@
 
     <div class="container-fluid page-body-wrapper">
 
-
         @yield("content")
 
     </div>
@@ -18,6 +17,7 @@
  @include("layouts.users.js")
 
 @yield("script")
+
 </body>
 
  </html>

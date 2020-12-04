@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <a href="{{route('push')}}" class="btn btn-outline-primary btn-block">Make a Push Notification!</a>
 
-                @if (session('status'))
+                    @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>

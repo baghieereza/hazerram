@@ -489,46 +489,7 @@
         }
       });
     }
-    if ($("#morris-dashboard-bar-chart").length) {
-      Morris.Bar({
-        element: 'morris-dashboard-bar-chart',
-        barColors: ['#fe946b', '#b663e6'],
-        barGap: 9,
-        barSizeRatio: 0.55,
-        hideHover: 'always',
-        grid: false,
-        data: [{
-            y: 'a',
-            a: 30,
-            b: 40
-          },
-          {
-            y: 'b',
-            a: 55,
-            b: 65
-          },
-          {
-            y: 'c',
-            a: 60,
-            b: 70
-          },
-          {
-            y: 'd',
-            a: 55,
-            b: 45
-          },
-          {
-            y: 'e',
-            a: 40,
-            b: 45
-          }
-        ],
-        xkey: 'y', 
-        ykeys: ['a', 'b'],
-        axes: 'x',
-        labels: ['Series A', 'Series B']
-      });
-    }
+
     if($("#growth-chart").length) {
       $("#growth-chart").sparkline('html', {
         enableTagOptions: true,
