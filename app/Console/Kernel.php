@@ -3,8 +3,10 @@
 namespace App\Console;
 
 use App\jobs\teacher;
+use App\Models\Sms_logs;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Signifly\SchedulingTasks\Facades\TaskLoader;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,7 +16,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\DemoCron::class,
     ];
 
     /**
@@ -26,7 +28,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {    teacher::sendSMS();   })->daily();
+
+        $schedule->command('demo:cron')
+            ->everyMinute();
 
     }
 
@@ -37,7 +41,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

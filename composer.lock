@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3676ebd70ee78738f5def4274ef89f2c",
+    "content-hash": "b94ecd826a3dea0160e44eb8cb15bd4f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2688,6 +2688,65 @@
                 }
             ],
             "time": "2020-08-18T17:17:46+00:00"
+        },
+        {
+            "name": "signifly/laravel-scheduling-tasks",
+            "version": "v1.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/signifly/laravel-scheduling-tasks.git",
+                "reference": "b403e5b5ebd541e98630d369c53b998871ea3e9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/signifly/laravel-scheduling-tasks/zipball/b403e5b5ebd541e98630d369c53b998871ea3e9a",
+                "reference": "b403e5b5ebd541e98630d369c53b998871ea3e9a",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^6.0|^7.0|^8.0",
+                "illuminate/support": "^6.0|^7.0|^8.0",
+                "php": "^7.2.5"
+            },
+            "require-dev": {
+                "mockery/mockery": "dev-master",
+                "orchestra/testbench": "^4.0|^5.0|^6.0",
+                "phpunit/phpunit": "^7.0|^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Signifly\\SchedulingTasks\\SchedulingTasksServiceProvider"
+                    ],
+                    "aliases": {
+                        "TaskLoader": "Signifly\\SchedulingTasks\\Facades\\TaskLoader"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Signifly\\SchedulingTasks\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Morten Poul Jensen",
+                    "email": "mpj@signifly.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Organize your Laravel scheduling tasks.",
+            "homepage": "https://github.com/signifly/laravel-scheduling-tasks",
+            "support": {
+                "issues": "https://github.com/signifly/laravel-scheduling-tasks/issues",
+                "source": "https://github.com/signifly/laravel-scheduling-tasks/tree/v1.5.2"
+            },
+            "time": "2020-11-23T13:29:04+00:00"
         },
         {
             "name": "spomky-labs/base64url",

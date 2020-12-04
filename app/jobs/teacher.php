@@ -26,6 +26,6 @@ class teacher
 
     public function sendSMS()
     {
-        $this->course->checkCourse();
+        return $this->course->checkCourse();
     }
 }

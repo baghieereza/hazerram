@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Http\helper;
 use App\Models\Course;
+use App\Models\CourseTime;
 
 /**
  * Class courseTimeRepository
@@ -14,15 +15,16 @@ class courseTimeRepository
 {
 
 
-    public function checkCourse()
+    public static function checkCourse()
     {
-
         $fiveMinuteAfter = helper::get5MinuteAfter();
-        $courses = Course::with("teacher")->get();
+        $courses = CourseTime::with("course")->get();
         if (count($courses) > 0) {
-            foreach ($courses as $cours) {
-                if ($cours->start_session == $fiveMinuteAfter) {
-
+            foreach ($courses as $row) {
+                if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteAfter && $row->course->status == 0) {
+                    $token = courseRepository::saveCourseHashCode($row->course->id);
+                    helper::sendSMS('teacher', $row->course->classes->name, $row->course->classes->school->name, route("changeCourseStatus") . "/" . $token, $row->course->teacher->mobile);
+                    helper::smsLog($row->id, 'teacher');
                 }
             }
         }
