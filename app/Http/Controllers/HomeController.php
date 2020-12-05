@@ -29,7 +29,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        courseTimeRepository::checkCourse();
+        courseTimeRepository::RunCourse();
 
         if (Gate::allows('isTeacher')) {
               $course_times = CourseTime::with('course')->whereHas('course',function ($q){

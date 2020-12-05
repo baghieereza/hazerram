@@ -65,4 +65,18 @@ class helper
         $date->modify('+5 minutes');
         return $date->format('Y-m-d H:i');
     }
+
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public static function get5MinuteEarlier()
+    {
+        $date = new DateTime;
+        $date->modify('-5 minutes');
+        return $date->format('Y-m-d H:i');
+    }
+
+
 }

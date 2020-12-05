@@ -27,10 +27,10 @@ class DemoCron extends Command
     /**
      * Create a new command instance.
      *
-      */
-    public function __construct( )
+     */
+    public function __construct()
     {
-         parent::__construct();
+        parent::__construct();
     }
 
     /**
@@ -41,7 +41,9 @@ class DemoCron extends Command
     public function handle()
     {
         \Log::info("Cron is working fine!");
-        courseTimeRepository::checkCourse();
-         $this->info('Demo:Cron Cummand Run successfully!');
+        courseTimeRepository::CheckCourse();
+        courseTimeRepository::StartCourse();
+        courseTimeRepository::RunCourse();
+        $this->info('Demo:Cron Cummand Run successfully!');
     }
 }
