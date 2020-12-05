@@ -108,6 +108,9 @@ class courseTimeRepository
     }
 
 
+    /**
+     * @throws \Exception
+     */
     public static function CheckCourseHasNotStarted()
     {
         $course_time = CourseTime::with(['course.classes.school.manager', 'course.teacher'])->get();
