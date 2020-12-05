@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Http\helper;
 use App\Models\Course;
 use App\Models\CourseTime;
+use App\Models\Present_student_notif;
+use App\Models\PresentTeacher;
 
 /**
  * Class courseTimeRepository
@@ -16,60 +18,107 @@ class courseTimeRepository
 
 
     /**
-     * check course to send sms to teacher
-     * @throws \Exception
+     * @param $id
+     * @param $courseId
+     *
+     * @return mixed
      */
-    public static function CheckCourse()
+    public static function changeStatusToStarting($id, $courseId)
     {
-        $fiveMinuteAfter = helper::get5MinuteAfter();
-        $courses = CourseTime::with("course")->get();
-        if (count($courses) > 0) {
-            foreach ($courses as $row) {
-                if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteAfter && $row->course->status == config('globalVariable.pause')) {
-                    $token = courseRepository::saveCourseHashCode($row->course_id);
-                    helper::sendSMS('teacher', $row->course->classes->name, $row->course->classes->school->name, route("changeCourseStatus") . "/" . $token, $row->course->teacher->mobile);
-                    helper::smsLog($row->course_id, 'teacher');
-                }
-            }
-        }
+        return CourseTime::where("id", $id)->where("course_id", $courseId)->update(["status" => config('globalVariable.starting')]);
     }
 
+
     /**
-     * change status course to starting
+     * @param $token
      *
-     * @throws \Exception
+     * @return mixed
      */
-    public static function StartCourse()
+    public function changeStatus($token)
     {
-        $fiveMinuteEarlier = helper::get5MinuteEarlier();
-        $courses = CourseTime::with("course")->get();
-        if (count($courses) > 0) {
-            foreach ($courses as $row) {
-                if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteEarlier && $row->course->status == config('globalVariable.accepted')) {
-                    courseRepository::changeStatusToStarting($row->course_id);
-                }
-            }
-        }
+        $course_time = CourseTime::where("token", $token)->first();
+        $course_time->status = config('globalVariable.accepted');
+        $course_time->save();
+        return presentTeacherRepository::store($course_time->id);
     }
 
+
     /**
-     * change status to doing and send notification
+     * @param $courseId
      *
+     * @return string
      * @throws \Exception
      */
-    public static function RunCourse()
+    public static function saveCourseHashCode($courseId)
     {
-        $fiveMinuteEarlier = helper::get5MinuteEarlier();
-        $courses = CourseTime::with("course")->get();
-        if (count($courses) > 0) {
-            foreach ($courses as $row) {
+        $bytes = random_bytes(20);
+        $bytes = bin2hex($bytes);
+        CourseTime::where("course_id", $courseId)->update(["token" => $bytes]);
+        return $bytes;
+    }
 
-                 if ($row->course->status == config('globalVariable.starting')) {
 
-//                    courseRepository::ChangeStatusToDoing($row->course_id);
-                    courseRepository::GetStudents($row->course_id);
+    /**
+     * @param $id
+     * @param $courseId
+     *
+     * @return mixed
+     */
+    public static function changeStatusToPresenting($id, $courseId)
+    {
+        return CourseTime::where("id", $id)->where("course_id", $courseId)->update(["status" => config('globalVariable.presenting')]);
+    }
 
-                }
+
+    /**
+     * @param $id
+     *
+     * @param $courseId
+     *
+     * @return mixed
+     */
+    public static function ChangeStatusToDoing($id, $courseId)
+    {
+        return CourseTime::where("id", $id)->where("course_id", $courseId)->update(["status" => config('globalVariable.doing')]);
+    }
+
+
+    /**
+     * if all task is done course finished
+     *
+     * @param $course_time_Id
+     *
+     * @return bool
+     */
+    public static function checkFinishingCourseTime($course_time_Id)
+    {
+        $count = 0;
+        $done = 0;
+        $course_time = Present_student_notif::where("id", $course_time_Id)->get();
+        foreach ($course_time as $value) {
+            ++$count;
+            if ($value->status == config("globalVariable.done")) {
+                ++$done;
+            }
+        }
+        if ($count == $done) {
+            return CourseTime::where("id", $course_time_Id)->update(['status' => config("globalVariable.finish")]);
+        }
+        return false;
+    }
+
+
+    public static function CheckCourseHasNotStarted()
+    {
+        $course_time = CourseTime::with(['course.classes.school.manager', 'course.teacher'])->get();
+        foreach ($course_time as $row) {
+            if (helper::addMinuteToTime($row->start_date, 5) < date('Y-m-d H:i') && $row->status == config("globalVariable.pause")) {
+                $teacherName = $row->course->teacher->name . "-" . $row->course->teacher->family;
+                $courseName = $row->course->name;
+                $date = date('H:i', strtotime($row->end_date)) . "-" . date('H:i', strtotime($row->start_date));
+                $managerNumber = $row->course->classes->school->manager->mobile;
+                helper::sendSMS('managerWarning', $teacherName, $courseName, $date, $managerNumber);
+                helper::smsLog($row->id, 'managerWarning');
             }
         }
     }

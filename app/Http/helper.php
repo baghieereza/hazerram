@@ -41,15 +41,15 @@ class helper
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         $result = curl_exec($ch);
-        $result = json_decode($result, TRUE);
+        return json_decode($result, TRUE);
 
     }
 
 
-    public static function smsLog($course_id, $text)
+    public static function smsLog($course_time_id, $text)
     {
         return sms_logs::create([
-            'course_id' => $course_id,
+            'course_time_id' => $course_time_id,
             'text' => $text,
             'date' => date("Y-m-d H:m:s")
         ]);
@@ -79,4 +79,27 @@ class helper
     }
 
 
+    /**
+     * @param $time
+     * @param $minute
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public static function addMinuteToTime($time, $minute)
+    {
+        $date = new DateTime($time);
+        $date->modify('+' . $minute . ' minutes');
+        return $date->format('Y-m-d H:i:s');
+    }
+
+
+    public static function getUsersPerMinuteToPushNotification($users, $notif_count)
+    {
+        $usersTOPush = [];
+        for ($i = 0; $i < $notif_count; $i++) {
+            $usersTOPush[] = $users[$i];
+        }
+        return $usersTOPush;
+    }
 }

@@ -28,4 +28,5 @@ class teacher
     {
         return $this->course->checkCourse();
     }
+
 }

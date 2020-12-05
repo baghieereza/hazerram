@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repository\courseRepository;
+use App\Repository\courseTimeRepository;
 
 /**
  * Class courseController
@@ -16,11 +17,11 @@ class CourseController extends Controller
     /**
      * courseController constructor.
      *
-     * @param \App\Repository\courseRepository $courseRepository
+     * @param \App\Repository\courseTimeRepository $courseTimeRepository
      */
-    public function __construct(courseRepository $courseRepository)
+    public function __construct(courseTimeRepository $courseTimeRepository)
     {
-        $this->course = $courseRepository;
+        $this->course = $courseTimeRepository;
         $this->middleware('auth');
     }
 

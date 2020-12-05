@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Repository\courseTimeRepository;
+use App\Repository\scheduleRepository;
 use Carbon\Carbon;
 use App\Models\CourseTime;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        courseTimeRepository::RunCourse();
+        scheduleRepository::CheckCourseHasNotStarted();
 
         if (Gate::allows('isTeacher')) {
               $course_times = CourseTime::with('course')->whereHas('course',function ($q){

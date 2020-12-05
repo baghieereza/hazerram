@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Http\helper;
 use App\Models\Sms_logs;
 use App\Repository\courseTimeRepository;
+use App\Repository\scheduleRepository;
 use Illuminate\Console\Command;
 
 class DemoCron extends Command
@@ -37,13 +38,19 @@ class DemoCron extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws \Exception
      */
     public function handle()
     {
         \Log::info("Cron is working fine!");
-        courseTimeRepository::CheckCourse();
-        courseTimeRepository::StartCourse();
-        courseTimeRepository::RunCourse();
+        scheduleRepository::CheckCourse();
+        scheduleRepository::StartCourse();
+        scheduleRepository::RunCourse();
+        scheduleRepository::SendNotification();
+        scheduleRepository::CheckCourseHasNotStarted();
+
+
         $this->info('Demo:Cron Cummand Run successfully!');
     }
 }
+

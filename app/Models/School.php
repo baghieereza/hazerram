@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class School extends Model
 {
     protected $table = 'school';
+
+    public function manager()
+    {
+        return $this->hasOne(User::class, 'id', 'manager_id');
+    }
 }

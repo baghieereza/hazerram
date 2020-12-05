@@ -10,7 +10,7 @@ class Course extends Model
 
 
     protected $fillable = [
-        'name', 'class_id', 'teacher_id', 'level_id', 'year_id', 'start_session', 'end_session', 'status', 'token'
+        'name', 'class_id', 'teacher_id', 'level_id', 'year_id', 'start_session', 'end_session', 'status'
     ];
 
     public function classes()
