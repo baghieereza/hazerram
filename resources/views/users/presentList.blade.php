@@ -18,27 +18,35 @@
                         <div class="card-body">
                             <div class="row p-3">
                                 <div class="col-md-3">
-                                    <b>نام درس : </b> <small>ریاضی 2</small>
+                                    <b>نام درس : </b> <small>{{$course_time->course->name}}</small>
                                 </div>
                                 <div class="col-md-3">
-                                    <b class="mr-1">پایه : </b> <small> سوم</small>
+                                    <b class="mr-1">پایه : </b> <small>{{$course_time->course->level->name}}</small>
                                 </div>
                                 <div class="col-md-3">
-                                    <b class="mr-1">معلم : </b> <small> حسن نقیبی</small>
+                                    <b class="mr-1">معلم : </b> <small> {{$course_time->course->teacher->name." ".$course_time->course->teacher->family}}</small>
                                 </div>
                                 <div class="col-md-3">
-                                    <b class="mr-1">مدرسه : </b> <small> شهید مفتح</small>
+                                    <b class="mr-1">مدرسه : </b> <small> {{$course_time->course->classes->school->name}}</small>
                                 </div>
                             </div>
                             <div class="row p-3">
                                 <div class="col-md-3">
-                                    <b>ساعت شروع : </b> <small>14:00</small>
+                                    <b>ساعت شروع : </b> <small>{{$course_time->course->start_session}}</small>
                                 </div>
                                 <div class="col-md-3">
-                                    <b class="mr-1">ساعت پایان : </b> <small> 16:00</small>
+                                    <b class="mr-1">ساعت پایان : </b> <small> {{$course_time->course->end_session}}</small>
                                 </div>
                                 <div class="col-md-3">
-                                    <b class="mr-1">وضعیت : </b> <small class="badge badge-success">  در حال برگذاری</small>
+                                    <b class="mr-1">وضعیت : </b> <small>
+                                        @if ($course_time->status == 0)
+                                            <div class="badge badge-danger badge-fw">گذشته</div>
+                                        @elseif($course_time->status == 5)
+                                            <div class="badge badge-success badge-fw">برگزار شده</div>
+                                        @else
+                                            <div class="badge badge-primary badge-fw">در حال برگذاری</div>
+                                        @endif
+                                    </small>
                                 </div>
                                 <div class="col-md-3">
                                     <b class="mr-1">زمان مانده  : </b> <small>  <span id="demo" class="bg-linkedin text-center p-2" style=" color: #ffff"></span> </small>
@@ -50,8 +58,9 @@
                                 <thead>
                                 <tr>
                                     <th>   ردیف  </th>
-                                    <th>  First name </th>
-                                    <th>  Progress  </th>
+                                    <th> نام و نام خانوادگی </th>
+                                    <th>  present_student_notif  </th>
+{{--                                      بسته به تعداد سطرهای present student notif--}}
                                     <th>  Amount   </th>
                                     <th>  Deadline </th>
                                 </tr>

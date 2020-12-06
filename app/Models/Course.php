@@ -8,16 +8,25 @@ class Course extends Model
 {
     protected $table = 'course';
 
+    public function course_time()
+    {
+        return $this->hasMany(CourseTime::class,'course_id','id');
+    }
 
-    protected $fillable = [
-        'name', 'class_id', 'teacher_id', 'level_id', 'year_id', 'start_session', 'end_session', 'status'
-    ];
+    public function level()
+    {
+        return $this->belongsTo('App\Models\Level', 'level_id');
+    }
 
-    public function classes()
+    public function get_course_students()
+    {
+        return $this->hasMany('App\CourseStudent', 'course_id');
+    }
+
+    public function  classes()
     {
         return $this->belongsTo('App\Models\Classes', 'class_id');
     }
-
 
     public function students()
     {
@@ -26,7 +35,7 @@ class Course extends Model
 
     public function teacher()
     {
-        return $this->hasOne(User::class, 'id', 'teacher_id');
+        return $this->belongsTo(User::class,'teacher_id');
     }
 
 

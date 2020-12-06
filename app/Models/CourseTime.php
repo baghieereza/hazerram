@@ -8,12 +8,13 @@ class CourseTime extends Model
 {
     protected $table = 'course_time';
 
-    protected $fillable = [
-        'course_id', 'start_date', 'end_date', 'status', 'token'
-    ];
-
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    public function present()
+    {
+        return $this->hasMany(PresentStudent::class , 'course_time_id' , 'id');
     }
 }

@@ -8,8 +8,15 @@ class School extends Model
 {
     protected $table = 'school';
 
+    public function classes()
+    {
+        return $this->hasMany(Classes::class, 'school_id');
+    }
+
     public function manager()
     {
-        return $this->hasOne(User::class, 'id', 'manager_id');
+        return $this->hasOne(User::class, "id", 'manager_id');
     }
+
+
 }

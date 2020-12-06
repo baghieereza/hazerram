@@ -20,32 +20,40 @@
                                         @if (!$course_times->isEmpty())
                                             @foreach($course_times as $course_time)
                                                 <div class="card rounded border mb-2">
-                                                    <div class="card-body p-3">
-                                                        <div class="media text-center">
-                                                            <i class="icon-book menu-icon"></i>
-                                                            <div class="media-body">
-                                                                <h6 class="mb-1 mr-2"> {{$course_time->course->name}} </h6>
-                                                                <p class="mb-0 text-muted">
-                                                                    پایه ی {{$course_time->course->level->name}} -
-                                                                </p>
-                                                            </div>
-                                                            <div class="media-body">
-                                                                <h6 class="mb-1 mr-2"> ساعت اول </h6>
-                                                                <p class="mb-0 text-muted">
-                                                                    {{$course_time->course->end_session}} - {{$course_time->course->start_session}}
-                                                                </p>
-                                                            </div>
-                                                            <div class="media-body">
-                                                                <h6 class="mb-1 mr-2"> تعداد<small> دانش آموز</small></h6>
-                                                                <p class="mb-0 text-muted">
-                                                                    {{$course_time->course->course_students->count()}}
-                                                                </p>
-                                                            </div>
-                                                            <div class="media-body">
-                                                                <i class="icon-ban " style="color: red"></i>
+                                                    <a href="/course_time/{{$course_time->id}}">
+                                                        <div class="card-body p-3">
+                                                            <div class="media text-center">
+                                                                <i class="icon-book menu-icon"></i>
+                                                                <div class="media-body">
+                                                                    <h6 class="mb-1 mr-2"> {{$course_time->course->name}} </h6>
+                                                                    <p class="mb-0 text-muted">
+                                                                        پایه ی {{$course_time->course->level->name}} -
+                                                                    </p>
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    <h6 class="mb-1 mr-2"> ساعت اول </h6>
+                                                                    <p class="mb-0 text-muted">
+                                                                        {{$course_time->course->end_session}} - {{$course_time->course->start_session}}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    <h6 class="mb-1 mr-2"> تعداد<small> دانش آموز</small></h6>
+                                                                    <p class="mb-0 text-muted">
+                                                                        {{$course_time->course->students->count()}}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    @if ($course_time->status == 0)
+                                                                        <div class="badge badge-danger badge-fw">گذشته</div>
+                                                                    @elseif($course_time->status == 5)
+                                                                        <div class="badge badge-success badge-fw">برگزار شده</div>
+                                                                    @else
+                                                                        <div class="badge badge-primary badge-fw">در حال برگذاری</div>
+                                                                    @endif
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </a>
                                                 </div>
                                             @endforeach
                                         @else
@@ -63,7 +71,7 @@
                             <h6 class="card-title">تعداد حاضرین و غائبین کلاس های این هفته</h6>
 
                             <hr>
-                            <div id="morris-dashboard-bar-chart" style="height:250px;"></div>
+                            <canvas id="morris-dashboard-bar-chart" style="height:250px;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -91,19 +99,21 @@
                                     @endphp
                                     @foreach($week_course_times as $week_course_time)
                                         <tr>
-                                        <td>{{$i}}</td>
-                                        <td>{{$week_course_time->course->name}}</td>
-                                        <td>{{$week_course_time->course->end_session}} - {{$week_course_time->course->start_session}}</td>
-                                        <td>{{$week_course_time->course->classes->school->name}}</td>
-                                        <td>دهم</td>
-                                        <td>
-                                            @if (now()->toDateTime() < $week_course_time->end_date)
-                                                <div class="badge badge-success badge-fw">در حال برگذاری</div>
-                                            @else
-                                                <div class="badge badge-danger badge-fw">گذشته</div>
-                                            @endif
-                                        </td>
-                                    </tr>
+                                            <td>{{$i}}</td>
+                                            <td>{{$week_course_time->course->name}}</td>
+                                            <td>{{$week_course_time->course->end_session}} - {{$week_course_time->course->start_session}}</td>
+                                            <td>{{$week_course_time->course->classes->school->name}}</td>
+                                            <td>دهم</td>
+                                            <td>
+                                                @if ($week_course_time->status == 0)
+                                                    <div class="badge badge-danger badge-fw">گذشته</div>
+                                                @elseif($week_course_time->status == 5)
+                                                    <div class="badge badge-success badge-fw">برگزار شده</div>
+                                                @else
+                                                    <div class="badge badge-primary badge-fw">در حال برگذاری</div>
+                                                @endif
+                                            </td>
+                                        </tr>
                                         @php
                                             $i += 1;
                                         @endphp
@@ -188,46 +198,81 @@
 @endsection()
 
 @section('script')
-    <script>
-        if ($("#morris-dashboard-bar-chart").length) {
-            Morris.Bar({
-                element: 'morris-dashboard-bar-chart',
-                barColors: ['#fe946b', '#b663e6'],
-                barGap: 9,
-                barSizeRatio: 0.55,
-                hideHover: 'always',
-                grid: false,
-                data: [{
-                    y: 'a',
-                    a: 30,
-                    b: 40
+        <script>
+            new Chart(document.getElementById("morris-dashboard-bar-chart"), {
+                type: 'bar',
+                data: {
+                    labels: [
+                        @foreach($week_course_times as $week_course_time)
+                            "{{$week_course_time->course->name}}",
+                        @endforeach
+                    ],
+
+                    datasets: [
+                        {
+                            label: "حاضرین",
+                            backgroundColor: "#3e95cd",
+                            data: [
+                                @php
+                                    $h = 0;
+                                    $q = 0;
+                                @endphp
+                                        @foreach($week_course_times as $week_course_time)
+                                            @if(count($week_course_time->present))
+                                                @foreach($week_course_time->present as $item)
+                                                    @if($item->is_present == 1)
+                                                        @php
+                                                            ++$h;
+                                                        @endphp
+                                                    @endif
+                                                @endforeach
+                                            {{$h}},
+                                            @else
+                                                0,
+                                            @endif
+                                            @php
+                                                $h = 0;
+                                                $q = 0;
+                                            @endphp
+                                        @endforeach
+                            ]
+                        }, {
+                            label: "غایبین",
+                            backgroundColor: "#8e5ea2",
+                            data: [
+                                @php
+                                    $h = 0;
+                                    $q = 0;
+                                @endphp
+                                    @foreach($week_course_times as $week_course_time)
+                                        @if(count($week_course_time->present))
+                                            @foreach($week_course_time->present as $item)
+                                                @if($item->is_present == 0)
+                                                    @php
+                                                        ++$q;
+                                                    @endphp
+                                                @endif
+                                            @endforeach
+                                        "{{$q}}",
+                                        @else
+                                            0,
+                                        @endif
+                                    @php
+                                        $h = 0;
+                                        $q = 0;
+                                    @endphp
+                                @endforeach
+                            ]
+                        }
+                    ]
                 },
-                    {
-                        y: 'b',
-                        a: 55,
-                        b: 65
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Population growth (millions)',
                     },
-                    {
-                        y: 'c',
-                        a: 60,
-                        b: 70
-                    },
-                    {
-                        y: 'd',
-                        a: 55,
-                        b: 45
-                    },
-                    {
-                        y: 'e',
-                        a: 40,
-                        b: 45
-                    }
-                ],
-                xkey: 'y',
-                ykeys: ['a', 'b'],
-                axes: 'x',
-                labels: ['Series A', 'Series B']
+                    beginAtZero : true,
+                }
             });
-        }
-    </script>
+        </script>
 @endsection

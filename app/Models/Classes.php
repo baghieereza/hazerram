@@ -8,8 +8,14 @@ class Classes extends Model
 {
     protected $table = 'class';
 
-    public function  school()
+
+    public function course()
     {
-        return $this->belongsTo('App\Models\School','school_id');
+        return $this->hasMany(Course::class, 'class_id', 'id');
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class,'school_id');
     }
 }

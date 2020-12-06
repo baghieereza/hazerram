@@ -14,10 +14,13 @@ class CourseStudent extends Model
         'name', 'course_id', 'student_id', 'status',
     ];
 
+    public function course()
+    {
+        return $this->belongsTo(Course::class,'course_id');
+    }
 
     public function student()
     {
         return $this->belongsTo(User::class);
     }
-
 }
