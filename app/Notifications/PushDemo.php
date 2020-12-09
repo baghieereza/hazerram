@@ -23,9 +23,9 @@ class PushDemo extends Notification
     public function toWebPush($notifiable, $notification)
     {
         return (new WebPushMessage)
-            ->title('کسکش پاشو بیا سرکلاس')
+            ->title('Im Notification Title')
             ->icon('/notification-icon.png')
-            ->body('کسکش کلاس شروع شده پاشو جنده')
+            ->body('Great, Push Notifications work!')
             ->action('View App', 'notification_action');
     }
 

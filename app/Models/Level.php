@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class level extends Model
+class Level extends Model
 {
     protected $table = 'level';
 }

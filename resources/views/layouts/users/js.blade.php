@@ -21,25 +21,4 @@
 <script src="{{asset("assets/js/dashboard.js")}}"></script>
 <!-- End custom js for this page-->
 <!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js"></script>
-
-<script>
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    var firebaseConfig = {
-        apiKey: "AIzaSyBlVkImyOCYxRqcaBHsX_oAE9pqTEKnQfI",
-        authDomain: "hazeram-3468f.firebaseapp.com",
-        projectId: "hazeram-3468f",
-        storageBucket: "hazeram-3468f.appspot.com",
-        messagingSenderId: "940389268680",
-        appId: "1:940389268680:web:20701eefd113d064c1f9fd",
-        measurementId: "G-3VQ60P6FDN"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-</script>
+<script src="{{asset("js/enable-push.js")}}"></script>

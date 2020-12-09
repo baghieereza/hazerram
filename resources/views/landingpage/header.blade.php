@@ -5,10 +5,10 @@
             <div class="row">
                 <div class="col-lg-6" align="center" direction="ltr">
                     <div class="text-container rtl">
-                        <h1><span class="turquoise">سیستم کیمیا</span>
+                        <h1><span class="turquoise">سامانه حاضرم</span>
                          </h1>
-                        <p class="p-large">با سرمایه گذاری تو سیستم تولید مداوم کیمیا همیشه در حال سود باش و حالشو ببر </p>
-                        <a class="btn-solid-lg page-scroll" href="#">عضویت</a>
+                        <p class="p-large">با استفاده از سامانه حاضرم از برگذاری کلاس های خود اطمینان حاصل کنید</p>
+                        <a class="btn-solid-lg page-scroll" href="{{route("register")}}">عضویت</a>
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-6">

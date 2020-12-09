@@ -7,6 +7,9 @@ use App\Models\Course;
 use App\Models\CourseTime;
 use App\Models\Present_student_notif;
 use App\Models\PresentTeacher;
+use App\Models\Sms_logs;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class courseTimeRepository
@@ -36,10 +39,16 @@ class courseTimeRepository
      */
     public function changeStatus($token)
     {
-        $course_time = CourseTime::where("token", $token)->first();
-        $course_time->status = config('globalVariable.accepted');
-        $course_time->save();
-        return presentTeacherRepository::store($course_time->id);
+        $teacher = Sms_logs::where("token", $token)->first();
+         if ($teacher) {
+            Auth::loginUsingId($teacher->teacher_id , true);
+            $course_time = CourseTime::where("token", $token)->first();
+            $course_time->status = config('globalVariable.accepted');
+            $course_time->save();
+            return presentTeacherRepository::store($course_time->id);
+        }
+        return false;
+
     }
 
 
@@ -113,6 +122,7 @@ class courseTimeRepository
      */
     public static function CheckCourseHasNotStarted()
     {
+        $fakeToekn = 'jhfsyifkhfjasghfgsd456g322354423sfsfsfdjisudfy';
         $course_time = CourseTime::with(['course.classes.school.manager', 'course.teacher'])->get();
         foreach ($course_time as $row) {
             if (helper::addMinuteToTime($row->start_date, 5) < date('Y-m-d H:i') && $row->status == config("globalVariable.pause")) {
@@ -121,7 +131,7 @@ class courseTimeRepository
                 $date = date('H:i', strtotime($row->end_date)) . "-" . date('H:i', strtotime($row->start_date));
                 $managerNumber = $row->course->classes->school->manager->mobile;
                 helper::sendSMS('managerWarning', $teacherName, $courseName, $date, $managerNumber);
-                helper::smsLog($row->id, 'managerWarning');
+                helper::smsLog($row->id, 'managerWarning', $fakeToekn, $row->course->classes->school->manager->id);
             }
         }
     }

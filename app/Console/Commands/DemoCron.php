@@ -43,11 +43,12 @@ class DemoCron extends Command
     public function handle()
     {
         \Log::info("Cron is working fine!");
-        scheduleRepository::CheckCourse();
-        scheduleRepository::StartCourse();
-        scheduleRepository::RunCourse();
-        scheduleRepository::SendNotification();
-        scheduleRepository::CheckCourseHasNotStarted();
+
+//        scheduleRepository::CheckCourse();
+//        scheduleRepository::StartCourse();
+//        scheduleRepository::RunCourse();
+//        scheduleRepository::SendNotification();
+//        scheduleRepository::CheckCourseHasNotStarted();
 
 
         $this->info('Demo:Cron Cummand Run successfully!');

@@ -26,10 +26,10 @@ class scheduleRepository
         $courses = CourseTime::with("course")->get();
         if (count($courses) > 0) {
             foreach ($courses as $row) {
-                if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteAfter && $row->course->status == config('globalVariable.pause')) {
+                 if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteAfter && $row->status == config('globalVariable.pause')) {
                     $token = courseTimeRepository::saveCourseHashCode($row->course_id);
                     helper::sendSMS('teacher', $row->course->classes->name, $row->course->classes->school->name, route("changeCourseStatus") . "/" . $token, $row->course->teacher->mobile);
-                    helper::smsLog($row->course_id, 'teacher');
+                    helper::smsLog($row->course_id, 'teacher', $token, $row->course->teacher_id);
                     presentTeacherRepository::store($row->id);
                 }
             }
@@ -47,7 +47,7 @@ class scheduleRepository
         $courses = CourseTime::with("course")->get();
         if (count($courses) > 0) {
             foreach ($courses as $row) {
-                if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteEarlier && $row->course->status == config('globalVariable.accepted')) {
+                if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteEarlier && $row->status == config('globalVariable.accepted')) {
                     courseTimeRepository::changeStatusToStarting($row->id, $row->course_id);
                 }
             }
@@ -61,11 +61,11 @@ class scheduleRepository
      */
     public static function RunCourse()
     {
-        $fiveMinuteEarlier = helper::get5MinuteEarlier();
+
         $courses = CourseTime::with("course")->get();
         if (count($courses) > 0) {
             foreach ($courses as $row) {
-                if ($row->$row->status == config('globalVariable.starting')) {
+                if ($row->status == config('globalVariable.starting')) {
                     courseTimeRepository::ChangeStatusToDoing($row->id, $row->course_id);
                     courseRepository::GetStudents($row->id);
                 }
@@ -81,7 +81,7 @@ class scheduleRepository
         $notifications = present_student_notifRepository::get();
         foreach ($notifications as $notif) {
             $users = explode(",", $notif->students_id);
-            if (count($users) > 0) {
+             if (count($users) > 0 &&  $notif->students_id <> "") {
                 $usersToPush = helper::getUsersPerMinuteToPushNotification($users, $notif->notif_count_per_minute);
                 Notification::send(User::whereIn("id", $usersToPush)->get(), new PushDemo);
                 present_student_notifRepository::update($notif->id, $usersToPush);
@@ -93,6 +93,10 @@ class scheduleRepository
         }
     }
 
+    /**
+     * check if course not started send sms to manager
+     * @throws \Exception
+     */
     public static function CheckCourseHasNotStarted()
     {
         courseTimeRepository::CheckCourseHasNotStarted();

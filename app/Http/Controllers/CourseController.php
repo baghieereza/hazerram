@@ -22,13 +22,17 @@ class CourseController extends Controller
     public function __construct(courseTimeRepository $courseTimeRepository)
     {
         $this->course = $courseTimeRepository;
-        $this->middleware('auth');
     }
 
+    /**
+     * @param $token
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function changeCourseStatus($token)
     {
         $this->course->changeStatus($token);
-        return redirect()->route("home");
+         return redirect()->route("home");
     }
 
 }

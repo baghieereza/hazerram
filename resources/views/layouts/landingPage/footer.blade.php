@@ -4,7 +4,7 @@
         <div class="row" align="right" direction="rtl">
             <div class="col-md-4">
                 <div class="footer-col">
-                    <h4>تداوم کیمیا</h4>
+                    <h4>سامانه حاضرم</h4>
                     <p>لورم ایپسوم یا متن آماده، متنی است جهانی که فقط و برای کمک به طراحان و برنامه‌نویس‌ها ایجاد شده
                         است.</p>
                 </div>
@@ -57,6 +57,13 @@
                                 <i class="fab fa-linkedin-in fa-stack-1x"></i>
                             </a>
                         </span>
+                    <div id="zarinpal" style="    display: contents;">
+                        <script src="https://www.zarinpal.com/webservice/TrustCode" type="text/javascript"></script>
+                    </div>
+
+                    <img id='nbqeesgtsizpfukzesgtrgvj' style='cursor:pointer'
+                         onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=209603&p=uiwkobpdpfvlgvkaobpdxlao", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")'
+                         alt='logo-samandehi' src='https://logo.samandehi.ir/logo.aspx?id=209603&p=odrflymabsiywlbqlymaqfti'/>
                 </div>
             </div> <!-- end of col -->
         </div> <!-- end of row -->
@@ -76,3 +83,4 @@
     </div> <!-- end of container -->
 </div> <!-- end of copyright -->
 <!-- end of copyright -->
+

@@ -81,7 +81,7 @@ class present_student_notifRepository
      *
      * @return mixed
      */
-    public function ChangeStatusToDone($id)
+    public static function ChangeStatusToDone($id)
     {
         return Present_student_notif::where("id", $id)->update(['status' => config("globalVariable.done")]);
     }

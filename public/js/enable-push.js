@@ -13,7 +13,7 @@ function initSW() {
     }
 
     //register the service worker
-    navigator.serviceWorker.register('sw.js')
+    navigator.serviceWorker.register('/sw.js')
         .then(() => {
             console.log('serviceWorker installed!')
             initPush();
@@ -46,6 +46,7 @@ function initPush() {
 function subscribeUser() {
     navigator.serviceWorker.ready
         .then((registration) => {
+
             const subscribeOptions = {
                 userVisibleOnly: true,
                 applicationServerKey: urlBase64ToUint8Array(
@@ -77,7 +78,8 @@ function urlBase64ToUint8Array(base64String) {
 function storePushSubscription(pushSubscription) {
     const token = document.querySelector('meta[name=csrf-token]').getAttribute('content');
 
-    fetch('/hazeram/public/push', {
+    console.log("sttt")
+    fetch('/push', {
         method: 'POST',
         body: JSON.stringify(pushSubscription),
         headers: {

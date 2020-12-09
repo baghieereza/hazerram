@@ -8,6 +8,11 @@ class Course extends Model
 {
     protected $table = 'course';
 
+
+    protected $fillable = [
+        'name', 'class_id', 'teacher_id', 'level_id', 'year_id', 'start_session', 'end_session', 'status','token',
+    ];
+
     public function course_time()
     {
         return $this->hasMany(CourseTime::class,'course_id','id');

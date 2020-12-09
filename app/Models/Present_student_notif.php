@@ -23,7 +23,7 @@ class Present_student_notif extends Model
      */
     public function time()
     {
-        return $this->belongsTo(CourseTime::class , 'course_time_id');
+        return $this->belongsTo(CourseTime::class, 'id', 'course_time_id');
     }
 
 }

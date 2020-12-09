@@ -17,11 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/course_time/{id}', 'HomeController@course_time');
+Route::get('/changeCourseStatus/{token?}', 'CourseController@changeCourseStatus')->name('changeCourseStatus');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::post('/push','PushController@store')->name("pushStore");
+Route::post('/push','PushController@store')->name("push");
 Route::get('/push','PushController@push')->name('push');
 Route::get('/logout', 'HomeController@logout')->name('home');
-Route::get('/changeCourseStatus/{token?}', 'CourseController@changeCourseStatus')->name('changeCourseStatus');

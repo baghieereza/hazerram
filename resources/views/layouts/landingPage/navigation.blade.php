@@ -4,7 +4,7 @@
     <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Evolo</a> -->
 
     <!-- Image Logo -->
-    <a class="navbar-brand logo-image" href="index.html"><img src="{{asset("kimia.png")}}" alt="alternative"></a>
+    <a class="navbar-brand logo-image" href="index.html"><img src="" alt="alternative"></a>
 
     <!-- Mobile Menu Toggle Button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"

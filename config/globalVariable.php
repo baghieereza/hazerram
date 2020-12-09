@@ -13,6 +13,5 @@ return [
     'maximumCount' => 5,
     'timeLimit' => 10,
     'do' => 0,
-    'doing' => 1,
-    'done' => 2,
+     'done' => 2,
 ];

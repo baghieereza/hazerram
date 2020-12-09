@@ -2,7 +2,7 @@
 
 namespace App\Http;
 
-use App\Models\sms_logs;
+use App\Models\Sms_logs;
 use App\Notifications\InvoicePaid;
 use DateTime;
 
@@ -46,12 +46,13 @@ class helper
     }
 
 
-    public static function smsLog($course_time_id, $text)
+    public static function smsLog($course_time_id, $text, $token, $user_id)
     {
-        return sms_logs::create([
+        return Sms_logs::create([
             'course_time_id' => $course_time_id,
             'text' => $text,
-            'date' => date("Y-m-d H:m:s")
+            'token' => $token,
+            'teacher_id' => $user_id
         ]);
     }
 
@@ -97,9 +98,9 @@ class helper
     public static function getUsersPerMinuteToPushNotification($users, $notif_count)
     {
         $usersTOPush = [];
-        for ($i = 0; $i < $notif_count; $i++) {
+        for ($i = 0; $i < 1; ++$i) {
             $usersTOPush[] = $users[$i];
-        }
-        return $usersTOPush;
+         }
+         return $usersTOPush;
     }
 }
