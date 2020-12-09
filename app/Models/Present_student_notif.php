@@ -19,11 +19,11 @@ class Present_student_notif extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function time()
     {
-        return $this->hasOne(CourseTime::class , 'course_id');
+        return $this->belongsTo(CourseTime::class , 'course_time_id');
     }
 
 }

@@ -8,7 +8,13 @@ class PresentStudent extends Model
 {
     protected $table = 'present_student';
 
+    public function course_time()
+    {
+        return $this->belongsTo(CourseTime::class,'course_time_id');
+    }
 
-
-
+    public function course_student()
+    {
+        return $this->belongsTo(CourseStudent::class,'course_student_id');
+    }
 }

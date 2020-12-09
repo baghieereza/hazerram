@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/course_time/{id}', 'HomeController@course_time');
 
 Auth::routes();
 

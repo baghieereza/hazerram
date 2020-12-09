@@ -9,6 +9,7 @@ use App\Models\School;
 use App\Models\CourseTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Present_student_notif;
 
 class HomeController extends Controller
 {
@@ -135,7 +136,12 @@ class HomeController extends Controller
 
     public function course_time($id)
     {
-        $course_time = CourseTime::with('course.classes.school')->where('id',$id)->first();
-        return view('users.presentList',compact('course_time'));
+         $course_time = CourseTime::with(['course.classes.school','present_student_notification'])->where('id',1)->first();
+          $presents = CourseTime::with(['present.course_student' => function($q){
+         $q->orderBy('student_id');
+     },'course.students' => function($q){
+         $q->orderBy('student_id');
+     }])->where('id',1)->first();
+        return view('users.presentList',compact('course_time','presents'));
     }
 }

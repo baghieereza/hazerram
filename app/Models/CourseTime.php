@@ -17,4 +17,9 @@ class CourseTime extends Model
     {
         return $this->hasMany(PresentStudent::class , 'course_time_id' , 'id');
     }
+
+    public function present_student_notification()
+    {
+        return $this->hasMany(Present_student_notif::class,'course_time_id','id');
+    }
 }
