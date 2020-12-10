@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Artisan;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    dd(Carbon::parse("2020-12-10 19:40:00")->addWeek(1));
 });
 Route::get('/clear-view', function() {
     Artisan::call('view:clear');
