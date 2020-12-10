@@ -97,27 +97,31 @@
                                     @php
                                         $i = 1;
                                     @endphp
-                                    @foreach($week_course_times as $week_course_time)
-                                        <tr>
-                                            <td>{{$i}}</td>
-                                            <td>{{$week_course_time->course->name}}</td>
-                                            <td>{{$week_course_time->course->end_session}} - {{$week_course_time->course->start_session}}</td>
-                                            <td>{{$week_course_time->course->classes->school->name}}</td>
-                                            <td>دهم</td>
-                                            <td>
-                                                @if ($week_course_time->status == 0)
-                                                    <div class="badge badge-danger badge-fw">گذشته</div>
-                                                @elseif($week_course_time->status == 5)
-                                                    <div class="badge badge-success badge-fw">برگزار شده</div>
-                                                @else
-                                                    <div class="badge badge-primary badge-fw">در حال برگذاری</div>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        @php
-                                            $i += 1;
-                                        @endphp
-                                    @endforeach
+                                    @if(!$week_course_times->isEmpty())
+                                        @foreach($week_course_times as $week_course_time)
+                                            <tr>
+                                                <td>{{$i}}</td>
+                                                <td>{{$week_course_time->course->name}}</td>
+                                                <td>{{$week_course_time->course->end_session}} - {{$week_course_time->course->start_session}}</td>
+                                                <td>{{$week_course_time->course->classes->school->name}}</td>
+                                                <td>دهم</td>
+                                                <td>
+                                                    @if ($week_course_time->status == 0)
+                                                        <div class="badge badge-danger badge-fw">گذشته</div>
+                                                    @elseif($week_course_time->status == 5)
+                                                        <div class="badge badge-success badge-fw">برگزار شده</div>
+                                                    @else
+                                                        <div class="badge badge-primary badge-fw">در حال برگذاری</div>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $i += 1;
+                                            @endphp
+                                        @endforeach
+                                    @else
+                                        برای این هفته کلاسی ندارید.
+                                    @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -199,6 +203,7 @@
 
 @section('script')
         <script>
+            @if(count($week_course_times))
             new Chart(document.getElementById("morris-dashboard-bar-chart"), {
                 type: 'bar',
                 data: {
@@ -273,5 +278,6 @@
                     beginAtZero : true,
                 }
             });
+            @endif
         </script>
 @endsection

@@ -158,12 +158,12 @@ class HomeController extends Controller
 
     public function course_time($id)
     {
-         $course_time = CourseTime::with(['course.classes.school','present_student_notification'])->where('id',1)->first();
+         $course_time = CourseTime::with(['course.classes.school','present_student_notification'])->where('id',$id)->first();
           $presents = CourseTime::with(['present.course_student' => function($q){
          $q->orderBy('student_id');
-     },'course.students' => function($q){
+        },'course.students' => function($q){
          $q->orderBy('student_id');
-     }])->where('id',1)->first();
+     }])->where('id',$id)->first();
         return view('users.presentList',compact('course_time','presents'));
     }
 }

@@ -78,24 +78,42 @@
                                             {{$presents->course->students[$i]->name." ".$presents->course->students[$i]->family}}
                                         </td>
                                         @if (count($presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id)))
-                                            @for ($k = 0; $k < $count; $k++)
-                                            <td>
-                                                    @if ($i >= 1)
-                                                        @php
-                                                           $value = array_values($presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id)->toArray());
-                                                        @endphp
-                                                    @else
-                                                        @php
-                                                          $value = $presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id);
-                                                        @endphp
-                                                    @endif
-                                                    @if ($value[$k]['is_present'] == 1)
-                                                        <i class="fa fa-check" style="color: green"></i>
-                                                    @else
-                                                        <i class="fa fa-times" style="color: red"></i>
-                                                    @endif
-                                                </td>
-                                            @endfor
+                                            @if ($i >= 1)
+                                                @php
+                                                    $value = array_values($presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id)->toArray());
+                                                @endphp
+                                            @else
+                                                @php
+                                                    $value = $presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id);
+                                                @endphp
+                                            @endif
+                                            @if($count ==  count($value))
+                                                    @for ($k = 0; $k < $count; $k++)
+                                                        <td>
+
+                                                            @if ($value[$k]['is_present'] == 1)
+                                                                <i class="fa fa-check" style="color: green"></i>
+                                                            @else
+                                                                <i class="fa fa-times" style="color: red"></i>
+                                                            @endif
+                                                        </td>
+                                                    @endfor
+                                            @else
+                                                    @for ($k = 0; $k < count($value); $k++)
+                                                        <td>
+                                                            @if ($value[$k]['is_present'] == 1)
+                                                                <i class="fa fa-check" style="color: green"></i>
+                                                            @else
+                                                                <i class="fa fa-times" style="color: red"></i>
+                                                            @endif
+                                                        </td>
+                                                    @endfor
+                                                    @for ($k = 0; $k < $count - count($value); $k++)
+                                                            <td>
+                                                                <i class="fa fa-spinner" style="color: gray"></i>
+                                                            </td>
+                                                    @endfor
+                                            @endif
                                         @else
                                             @for ($k = 0; $k < $count; $k++)
                                                 <td>
