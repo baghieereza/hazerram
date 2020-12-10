@@ -24,7 +24,8 @@
                                     <b class="mr-1">پایه : </b> <small>{{$course_time->course->level->name}}</small>
                                 </div>
                                 <div class="col-md-3">
-                                    <b class="mr-1">معلم : </b> <small> {{$course_time->course->teacher->name." ".$course_time->course->teacher->family}}</small>
+                                    <b class="mr-1">معلم : </b>
+                                    <small> {{$course_time->course->teacher->name." ".$course_time->course->teacher->family}}</small>
                                 </div>
                                 <div class="col-md-3">
                                     <b class="mr-1">مدرسه : </b> <small> {{$course_time->course->classes->school->name}}</small>
@@ -32,10 +33,11 @@
                             </div>
                             <div class="row p-3">
                                 <div class="col-md-3">
-                                    <b>ساعت شروع : </b> <small>{{$course_time->course->start_session}}</small>
+                                    <b>ساعت شروع : </b> <small>{{\Carbon\Carbon::parse($course_time->course->start_session)->format("H:i")}}</small>
                                 </div>
                                 <div class="col-md-3">
-                                    <b class="mr-1">ساعت پایان : </b> <small> {{$course_time->course->end_session}}</small>
+                                    <b class="mr-1">ساعت پایان : </b>
+                                    <small> {{\Carbon\Carbon::parse($course_time->course->end_session)->format("H:i")}}</small>
                                 </div>
                                 <div class="col-md-3">
                                     <b class="mr-1">وضعیت : </b> <small>
@@ -67,7 +69,7 @@
                                 <tbody>
                                 @php
                                     $j = 1;
-                                    $count = $course_time->present_student_notification->count();
+                                    $count = $course_time->present_student_notification->count()
                                 @endphp
                                 @for ($i = 0; $i < $presents->course->students->count(); $i++)
                                     <tr>
@@ -80,11 +82,11 @@
                                         @if (count($presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id)))
                                             @if ($i >= 1)
                                                 @php
-                                                    $value = array_values($presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id)->toArray());
+                                                    $value = array_values($presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id)->toArray())
                                                 @endphp
                                             @else
                                                 @php
-                                                    $value = $presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id);
+                                                    $value = $presents->present->where('course_student.student_id',$presents->course->students[$i]->pivot->student_id)
                                                 @endphp
                                             @endif
                                             @if($count ==  count($value))
@@ -123,7 +125,7 @@
                                         @endif
                                     </tr>
                                     @php
-                                        $j += 1;
+                                        $j += 1
                                     @endphp
                                 @endfor
                                 </tbody>

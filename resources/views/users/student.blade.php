@@ -32,15 +32,16 @@
                                                             <div class="media-body">
                                                                 <h6 class="mb-1 mr-2"> ساعت اول </h6>
                                                                 <p class="mb-0 text-muted">
-                                                                    {{$course_time->end_session}} - {{$course_time->start_session}}
+                                                                    {{\Carbon\Carbon::parse($course_time->end_session)->format("H:i")}}
+                                                                    - {{\Carbon\Carbon::parse($course_time->start_session)->format("H:i")}}
                                                                 </p>
                                                             </div>
                                                             <div class="media-body">
                                                                 <h6 class="mb-1 mr-2"> وضعیت کلاس</h6>
                                                                 <p class="mb-0 text-muted">
-                                                                @if ($course_time->status == 0)
+                                                                @if ($course_time->course_time_status == 0)
                                                                     <div class="badge badge-danger badge-fw">گذشته</div>
-                                                                @elseif($course_time->status == 5)
+                                                                @elseif($course_time->course_time_status == 5)
                                                                     <div class="badge badge-success badge-fw">برگزار شده</div>
                                                                 @else
                                                                     <div class="badge badge-primary badge-fw">در حال برگذاری</div>
@@ -100,13 +101,14 @@
                                     <tbody>
                                     @if (count($week_course_times))
                                         @php
-                                            $i = 1;
+                                            $i = 1
                                         @endphp
                                         @foreach($week_course_times as $item)
                                             <tr>
                                                 <td>{{$i}}</td>
                                                 <td>{{$item->name}}</td>
-                                                <td>{{$item->end_session}} - {{$item->start_session}}</td>
+                                                <td>{{\Carbon\Carbon::parse($item->end_session)->format("H:i")}}
+                                                    - {{\Carbon\Carbon::parse($item->start_session)->format("H:i")}}</td>
                                                 <td>{{$item->school_name}}</td>
                                                 <td>{{$item->level_name}}</td>
                                                 <td>
@@ -120,7 +122,7 @@
                                                 </td>
                                             </tr>
                                             @php
-                                                $i += 1;
+                                                $i += 1
                                             @endphp
                                         @endforeach
                                     @else
@@ -182,13 +184,10 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
@@ -210,7 +209,7 @@
         @php
             $total = 0;
             $h = 0;
-            $q = 0;
+            $q = 0
         @endphp
         @if(count($week_course_times_present))
                 @foreach($week_course_times_present as $week)
@@ -218,7 +217,7 @@
                         @php
                             $total += $week->present_student->count();
                             $h += $week->present_student->where('is_present','=',1)->count();
-                            $q += $week->present_student->where('is_present','=',0)->count();
+                            $q += $week->present_student->where('is_present','=',0)->count()
                         @endphp
                         var total = {{$total}};
                         var browsersChart = Morris.Donut({

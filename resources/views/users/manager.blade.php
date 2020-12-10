@@ -32,7 +32,8 @@
                                                             <div class="media-body">
                                                                 <h6 class="mb-1 mr-2"> ساعت اول </h6>
                                                                 <p class="mb-0 text-muted">
-                                                                    {{$course_time->end_session}} - {{$course_time->start_session}}
+                                                                    {{\Carbon\Carbon::parse($course_time->end_session)->format("H:i")}}
+                                                                    - {{\Carbon\Carbon::parse($course_time->start_session)->format("H:i")}}
                                                                 </p>
                                                             </div>
                                                             <div class="media-body">
@@ -145,13 +146,14 @@
                                     <tbody>
                                     @if (count($week_course_times))
                                         @php
-                                            $i = 1;
+                                            $i = 1
                                         @endphp
                                         @foreach($week_course_times as $item)
                                             <tr>
                                                 <td>{{$i}}</td>
                                                 <td>{{$item->course_name}}</td>
-                                                <td>{{$item->end_session}} - {{$item->start_session}}</td>
+                                                <td>{{\Carbon\Carbon::parse($item->end_session)->format("H:i")}}
+                                                    - {{\Carbon\Carbon::parse($item->start_session)->format("H:i")}}</td>
                                                 <td>{{$item->school_name}}</td>
                                                 <td>{{$item->level_name}}</td>
                                                 <td>
@@ -165,7 +167,7 @@
                                                 </td>
                                             </tr>
                                             @php
-                                                $i += 1;
+                                                $i += 1
                                             @endphp
                                         @endforeach
                                     @else
@@ -276,7 +278,7 @@
                             @if(count($week_course_time->classes))
                             @for($i = 0; $i < count($week_course_time->classes); $i++)
                             @php
-                                $h = 0;
+                                $h = 0
                             @endphp
                             @if(count($week_course_time->classes[$i]->course))
                             @foreach($week_course_time->classes[$i]->course as $course)
@@ -286,7 +288,7 @@
                             @foreach($course_time->present as $present)
                             @if($present->is_present == 1)
                             @php
-                                $h++;
+                                $h++
                             @endphp
                             @endif
                             @endforeach
@@ -308,7 +310,7 @@
                             @if(count($week_course_time->classes))
                             @for($i = 0; $i < count($week_course_time->classes); $i++)
                             @php
-                                $q = 0;
+                                $q = 0
                             @endphp
                             @if(count($week_course_time->classes[$i]->course))
                             @foreach($week_course_time->classes[$i]->course as $course)
@@ -318,7 +320,7 @@
                             @foreach($course_time->present as $present)
                             @if($present->is_present == 0)
                             @php
-                                $q++;
+                                $q++
                             @endphp
                             @endif
                             @endforeach

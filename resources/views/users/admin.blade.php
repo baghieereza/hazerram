@@ -31,7 +31,8 @@
                                                         <div class="media-body">
                                                             <h6 class="mb-1 mr-2"> ساعت اول </h6>
                                                             <p class="mb-0 text-muted">
-                                                                {{$course_time->end_session}} - {{$course_time->start_session}}
+                                                                {{\Carbon\Carbon::parse($course_time->end_session)->format("H:i")}}
+                                                                - {{\Carbon\Carbon::parse($course_time->start_session)->format("H:i")}}
                                                             </p>
                                                         </div>
                                                         <div class="media-body">
@@ -77,7 +78,7 @@
                 $i = 0;
                 $c = 0;
                 $h = 0;
-                $q = 0;
+                $q = 0
             @endphp
             @foreach($schools as $item)
                 @if (count($item->classes))
@@ -105,7 +106,7 @@
                     @endforeach
                 @endif
                     @php
-                        $i += 1;
+                        $i += 1
                     @endphp
             @endforeach
             <div class="row">
@@ -130,12 +131,12 @@
                                     <p class="mb-0">کلاس</p>
                                     <h6>
                                         @php
-                                        $k = 0;
+                                            $k = 0
                                         @endphp
                                         @foreach($schools as $item)
                                             @if (count($item->classes))
                                                 @php
-                                                    $k += count($item->classes);
+                                                    $k += count($item->classes)
                                                 @endphp
                                             @endif
                                         @endforeach
@@ -219,7 +220,7 @@
                                     </thead>
                                     <tbody>
                                     @php
-                                        $j = 1;
+                                        $j = 1
                                     @endphp
                                     @foreach($schools as $item)
                                         <tr>
@@ -232,7 +233,7 @@
                                             <td> {{$q}} </td>
                                         </tr>
                                         @php
-                                            $j += 1;
+                                            $j += 1
                                         @endphp
                                     @endforeach
                                     </tbody>
@@ -331,7 +332,7 @@
                         data: [
                             @foreach($week_course_times_present as $week_course_time)
                                 @php
-                                    $h = 0;
+                                    $h = 0
                                 @endphp
                                 @if(count($week_course_time->classes))
                                     @foreach($week_course_time->classes as $class)
@@ -341,7 +342,7 @@
                                                     @foreach($course->course_time as $course_time)
                                                         @if(count($course_time->present))
                                                             @php
-                                                                $h += $course_time->present->where("is_present",1)->count();
+                                                                $h += $course_time->present->where("is_present",1)->count()
                                                             @endphp
                                                         @endif
                                                     @endforeach
@@ -360,7 +361,7 @@
                         data: [
                             @foreach($week_course_times_present as $week_course_time)
                                 @php
-                                    $q = 0;
+                                    $q = 0
                                 @endphp
                                 @if(count($week_course_time->classes))
                                     @foreach($week_course_time->classes as $class)
@@ -370,7 +371,7 @@
                                                     @foreach($course->course_time as $course_time)
                                                         @if(count($course_time->present))
                                                             @php
-                                                                $q += $course_time->present->where("is_present",0)->count();
+                                                                $q += $course_time->present->where("is_present",0)->count()
                                                             @endphp
                                                         @endif
                                                     @endforeach
