@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Course;
 use App\Models\School;
 use App\Models\CourseTime;
+use App\Models\CourseStudent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Present_student_notif;
@@ -69,11 +70,13 @@ class HomeController extends Controller
             $now = Carbon::now();
             $start = $now->startOfWeek(Carbon::SATURDAY)->toDateTimeString();
             $end = $now->endOfWeek(Carbon::WEDNESDAY)->toDateTimeString();
-           $d = $week_course_times_present = School::with('classes.course')->wherehas('classes.course', function ($q) {
-               $q->where('course.id', 1);
-           })->where('school.manager_id', auth()->id())->first();
+            $week_course_times_present = School::with(['classes.course.course_time'])->whereHas('classes.course.course_time', function ($q)use($start,$end){
+               $q->whereBetween('start_date', [
+                   $start,
+                   $end,
+               ]);
+           })->where('school.manager_id', auth()->id())->get();
 
-           dd($d);
 
 
             $week_course_times = DB::select("select level.name as level_name, course.*, course_time.*, school.*, class.*, course.id as course_id,
@@ -83,6 +86,7 @@ class HomeController extends Controller
                 and course.id = course_time.course_id and class.id = course.class_id
                 and school.id = class.school_id and school.manager_id = " . auth()->id() . "
                 and school.status = 1 and course_time.start_date BETWEEN '" . $start . "' and '" . $end . "'");
+
             return view('users.manager', compact('course_times','week_course_times','week_course_times_present'));
         }
         if (Gate::allows('isAdmin')) {
@@ -96,6 +100,7 @@ class HomeController extends Controller
                 and school.id = class.school_id 
                 and school.status = 1 and course_time.start_date BETWEEN '" . now()->toDateString() . " 00:00:00" . "'
                 and '" . now()->toDateString() . " 23:59:59" . "'");
+
             foreach ($course_times as $course_time)
             {
                 foreach ($res as $item)
@@ -108,7 +113,18 @@ class HomeController extends Controller
             $schools = School::with(['manager' , 'classes.course.course_time.present'])->get();
             $teachers_count = User::where('role','teacher')->where('status',1)->count();
 
-            return view('users.admin',compact('course_times', 'schools','teachers_count'));
+            $now = Carbon::now();
+            $start = $now->startOfWeek(Carbon::SATURDAY)->toDateTimeString();
+            $end = $now->endOfWeek(Carbon::WEDNESDAY)->toDateTimeString();
+
+            $week_course_times_present = School::with('classes.course.course_time.present')->whereHas("classes.course.course_time",function ($q)use($start,$end){
+                $q->whereBetween('start_date', [
+                    $start,
+                    $end,
+                ]);
+            })->get();
+             $week_course_times_present[0]->classes[0]->course[0]->course_time[0]->present->where("is_present",0)->count();
+            return view('users.admin',compact('course_times', 'schools','teachers_count','week_course_times_present'));
         }
         if (Gate::allows('isStudent')) {
 
@@ -123,7 +139,13 @@ class HomeController extends Controller
                                     ,course_time.start_date, course_time.status as course_time_status, level.name as level_name, course.class_id, class.school_id, school.name as school_name
                 from course,course_student,course_time,level,class,school where school.id = class.school_id and level.id = course.level_id and class.id = course.class_id and course.id = course_time.course_id and course.id = course_student.course_id and course_student.student_id = " . auth()->id() . " and course_time.start_date BETWEEN '" . $start . "' and '" . $end . "'");
 
-            return view('users.student', compact('week_course_times', 'course_times'));
+              $week_course_times_present = CourseStudent::with(["course.course_time.present","present_student"])->whereHas("course.course_time.present",function ($q) use($start,$end){
+                $q->whereBetween('start_date', [
+                    $start,
+                    $end,
+                ]);
+            })->where("course_student.student_id",'=',auth()->id())->get();
+            return view('users.student', compact('week_course_times', 'course_times','week_course_times_present'));
         }
     }
 

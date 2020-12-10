@@ -194,7 +194,7 @@
         }
       });
     }
-    if ($("#dashboard-donut-chart").length) {
+    if ($("#dashboard-donut-chart22222").length) {
       $(function() {
         var total = 62;
         var browsersChart = Morris.Donut({

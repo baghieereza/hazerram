@@ -105,9 +105,9 @@
                                             <td>{{$item->school_name}}</td>
                                             <td>{{$item->level_name}}</td>
                                             <td>
-                                                @if ($item->status == 0)
+                                                @if ($item->course_time_status == 0)
                                                     <div class="badge badge-danger badge-fw">گذشته</div>
-                                                @elseif($item->status == 5)
+                                                @elseif($item->course_time_status == 5)
                                                     <div class="badge badge-success badge-fw">برگزار شده</div>
                                                 @else
                                                     <div class="badge badge-primary badge-fw">در حال برگذاری</div>
@@ -196,3 +196,46 @@
     </div>
 
 @endsection()
+
+@section('script')
+    <script>
+        @php
+            $total = 0;
+            $h = 0;
+            $q = 0;
+        @endphp
+        @foreach($week_course_times_present as $week)
+                @php
+                    $total += $week->present_student->count();
+                    $h += $week->present_student->where('is_present','=',1)->count();
+                    $q += $week->present_student->where('is_present','=',0)->count();
+                @endphp
+        @endforeach
+        var total = {{$total}};
+        var browsersChart = Morris.Donut({
+            element: 'dashboard-donut-chart',
+            data: [
+                {
+                    label: "حاضر",
+                    value: {{$h}}
+                },
+                {
+                    label: "غایب",
+                    value: {{$q}}
+                }
+            ],
+            resize: true,
+            colors: ['#03a9f3', '#00c292'],
+            formatter: function(value, data) {
+                return Math.floor(value / total * 100) + '%';
+            }
+        });
+
+        browsersChart.options.data.forEach(function(label, i) {
+            var legendItem = $('<span></span>').text(label['label']).prepend('<span>&nbsp;</span>');
+            legendItem.find('span')
+                .css('backgroundColor', browsersChart.options.colors[i]);
+            $('#legend').append(legendItem)
+        });
+    </script>
+@stop

@@ -49,7 +49,7 @@
                                                                 <div class="badge badge-success badge-fw">برگزار شده</div>
                                                             @else
                                                                 <div class="badge badge-primary badge-fw">در حال برگذاری</div>
-                                                            @endif
+                                                                @endif
                                                                 </p>
                                                         </div>
                                                     </div>
@@ -68,7 +68,7 @@
                             <h6 class="card-title">تعداد حاضرین و غائبین کلاس های این هفته</h6>
 
                             <hr>
-                            <div id="morris-dashboard-bar-chart3" style="height:250px;"></div>
+                            <canvas id="morris-dashboard-bar-chart3" style="height:250px;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                         <div class="card-body">
                             <h4 class="card-title " style="color: white">کلاس های در حال برگزاری</h4>
                             <div class="d-flex justify-content-between">
-                                <p class="text-muted"> </p>
+                                <p class="text-muted"></p>
                                 <p class="text-muted" style="color: whitesmoke !important;"> تعداد: 40</p>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                         <div class="card-body">
                             <h4 class="card-title " style="color: white">کلاس های لغو شده</h4>
                             <div class="d-flex justify-content-between">
-                                <p class="text-muted"> </p>
+                                <p class="text-muted"></p>
                                 <p class="text-muted" style="color: white !important;"> تعداد: 40</p>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                         <div class="card-body">
                             <h4 class="card-title " style="color: white">حاضرین فعلی</h4>
                             <div class="d-flex justify-content-between">
-                                <p class="text-muted"> </p>
+                                <p class="text-muted"></p>
                                 <p class="text-muted" style="color: whitesmoke !important;"> تعداد: 40</p>
                             </div>
                         </div>
@@ -112,14 +112,12 @@
                         <div class="card-body">
                             <h4 class="card-title " style="color: white">غایبین فعلی</h4>
                             <div class="d-flex justify-content-between">
-                                <p class="text-muted"> </p>
+                                <p class="text-muted"></p>
                                 <p class="text-muted" style="color: white"> تعداد: 40</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
 
 
             </div>
@@ -250,10 +248,13 @@
             type: 'bar',
             data: {
                 labels: [
-                    @foreach($week_course_times_present as $week_course_time)
-                        @foreach($week_course_time->classes as $class)
-                            "{{$class->course->name}}",
-                        @endforeach
+
+                            @foreach($week_course_times_present as $week_course_time)
+                            @if(count($week_course_time->classes))
+                            @foreach($week_course_time->classes as $class)
+                        "{{$class->code}}",
+                    @endforeach
+                    @endif
                     @endforeach
                 ],
 
@@ -262,54 +263,64 @@
                         label: "حاضرین",
                         backgroundColor: "#3e95cd",
                         data: [
+                            @foreach($week_course_times_present as $week_course_time)
+                            @if(count($week_course_time->classes))
+                            @for($i = 0; $i < count($week_course_time->classes); $i++)
                             @php
                                 $h = 0;
-                                $q = 0;
                             @endphp
-                            @foreach($week_course_times_present as $week_course_time)
-                            @if(count($week_course_time->classes->course->course_time->present))
-                            @foreach($week_course_time->classes->course->course_time->present as $item)
-                            @if($item->is_present == 1)
+                            @if(count($week_course_time->classes[$i]->course))
+                            @foreach($week_course_time->classes[$i]->course as $course)
+                            @if(count($course->course_time))
+                            @foreach($course->course_time as $course_time)
+                            @if(count($course_time->present))
+                            @foreach($course_time->present as $present)
+                            @if($present->is_present == 1)
                             @php
-                                ++$h;
+                                $h++;
                             @endphp
                             @endif
                             @endforeach
-                            {{$h}},
-                            @else
-                                0,
                             @endif
-                            @php
-                                $h = 0;
-                                $q = 0;
-                            @endphp
+                            @endforeach
+                            @endif
+                            @endforeach
+                            @endif
+                            {{$h}},
+                            @endfor
+                            @endif
                             @endforeach
                         ]
                     }, {
                         label: "غایبین",
                         backgroundColor: "#8e5ea2",
                         data: [
+                            @foreach($week_course_times_present as $week_course_time)
+                            @if(count($week_course_time->classes))
+                            @for($i = 0; $i < count($week_course_time->classes); $i++)
                             @php
-                                $h = 0;
                                 $q = 0;
                             @endphp
-                                    @foreach($week_course_times_present as $week_course_time)
-                                    @if(count($week_course_time->classes->course->course_time->present))
-                                    @foreach($week_course_time->classes->course->course_time->present as $item)
-                                    @if($item->is_present == 0)
-                                    @php
-                                        ++$q;
-                                    @endphp
-                                    @endif
-                                    @endforeach
-                                "{{$q}}",
-                            @else
-                                0,
+                            @if(count($week_course_time->classes[$i]->course))
+                            @foreach($week_course_time->classes[$i]->course as $course)
+                            @if(count($course->course_time))
+                            @foreach($course->course_time as $course_time)
+                            @if(count($course_time->present))
+                            @foreach($course_time->present as $present)
+                            @if($present->is_present == 0)
+                            @php
+                                $q++;
+                            @endphp
                             @endif
-                            @php
-                                $h = 0;
-                                $q = 0;
-                            @endphp
+                            @endforeach
+                            @endif
+                            @endforeach
+                            @endif
+                            @endforeach
+                            @endif
+                            {{$q}},
+                            @endfor
+                            @endif
                             @endforeach
                         ]
                     }
@@ -318,9 +329,8 @@
             options: {
                 title: {
                     display: true,
-                    text: 'Population growth (millions)',
                 },
-                beginAtZero : true,
+                beginAtZero: true,
             }
         });
     </script>

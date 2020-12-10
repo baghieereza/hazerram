@@ -269,7 +269,6 @@
                 options: {
                     title: {
                         display: true,
-                        text: 'Population growth (millions)',
                     },
                     beginAtZero : true,
                 }

@@ -68,7 +68,7 @@
                             <h6 class="card-title">تعداد حاضرین و غائبین کلاس های این هفته</h6>
 
                             <hr>
-                            <div id="morris-dashboard-bar-chart2" style="height:250px;"></div>
+                            <canvas id="morris-dashboard-bar-chart_admin" style="height:250px;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -311,3 +311,87 @@
     </div>
 
 @endsection()
+
+@section("script")
+    <script>
+        new Chart(document.getElementById("morris-dashboard-bar-chart_admin"), {
+            type: 'bar',
+            data: {
+                labels: [
+                    @foreach($week_course_times_present as $week_course_time)
+                        "{{$week_course_time->name}}",
+                    @endforeach
+                    " ",
+                ],
+
+                datasets: [
+                    {
+                        label: "حاضرین",
+                        backgroundColor: "#3e95cd",
+                        data: [
+                            @foreach($week_course_times_present as $week_course_time)
+                                @php
+                                    $h = 0;
+                                @endphp
+                                @if(count($week_course_time->classes))
+                                    @foreach($week_course_time->classes as $class)
+                                        @if(count($class->course))
+                                            @foreach($class->course as $course)
+                                                @if(count($course->course_time))
+                                                    @foreach($course->course_time as $course_time)
+                                                        @if(count($course_time->present))
+                                                            @php
+                                                                $h += $course_time->present->where("is_present",1)->count();
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                @endif
+                            {{$h}},
+                            @endforeach
+                            0,
+                        ]
+                    }, {
+                        label: "غایبین",
+                        backgroundColor: "#8e5ea2",
+                        data: [
+                            @foreach($week_course_times_present as $week_course_time)
+                                @php
+                                    $q = 0;
+                                @endphp
+                                @if(count($week_course_time->classes))
+                                    @foreach($week_course_time->classes as $class)
+                                        @if(count($class->course))
+                                            @foreach($class->course as $course)
+                                                @if(count($course->course_time))
+                                                    @foreach($course->course_time as $course_time)
+                                                        @if(count($course_time->present))
+                                                            @php
+                                                                $q += $course_time->present->where("is_present",0)->count();
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                @endif
+                                {{$q}},
+                            @endforeach
+                            0,
+                        ]
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                },
+                beginAtZero: true,
+            }
+        });
+    </script>
+@endsection
