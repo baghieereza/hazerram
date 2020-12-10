@@ -57,11 +57,11 @@ class helper
         ]);
     }
 
-    public static function NotificationLog($id, $manager_id)
+    public static function NotificationLog($id, $manager_id, $second)
     {
         $log = new Notification_logs();
         $log->fill([
-            'expire_date' => date("Y-m-d H:i:s", strtotime("+10 sec")),
+            'expire_date' => date("Y-m-d H:i:s", strtotime("+" . $second . " sec")),
             "course_time_id" => $id,
             "receiver_id" => $manager_id
         ]);

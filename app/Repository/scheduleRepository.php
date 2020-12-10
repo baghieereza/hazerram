@@ -7,6 +7,7 @@ use App\Models\CourseTime;
 use App\Models\User;
 use App\Notifications\PushDemo;
 use App\Notifications\PushToStudent;
+use App\Notifications\PushToTeacher;
 use Illuminate\Routing\Route;
 use Notification;
 
@@ -30,8 +31,11 @@ class scheduleRepository
             foreach ($courses as $row) {
                 if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteAfter && $row->status == config('globalVariable.pause')) {
                     $token = courseTimeRepository::saveCourseHashCode($row->course_id);
-                    helper::sendSMS('teacher', $row->course->classes->name, $row->course->classes->school->name, route("changeCourseStatus") . "/" . $token, $row->course->teacher->mobile);
-                    helper::smsLog($row->course_id, 'teacher', $token, $row->course->teacher_id);
+                    $log_id = helper::NotificationLog($row->id, $row->course->teacher->id, 600);
+                    $teacher_id = $row->course->teacher->id;
+                    Notification::send(User::find($teacher_id), new PushToTeacher(route("changeCourseStatus") . "/" . $token . "/" . $teacher_id . '/' . $log_id));
+//                    helper::sendSMS('teacher', $row->course->classes->name, $row->course->classes->school->name, route("changeCourseStatus") . "/" . $token, $row->course->teacher->mobile);
+//                    helper::smsLog($row->course_id, 'teacher', $token, $row->course->teacher_id);
                     presentTeacherRepository::store($row->id);
                 }
             }
@@ -86,8 +90,8 @@ class scheduleRepository
             if (count($users) > 0 && $notif->students_id <> "") {
                 $usersToPush = helper::getUsersPerMinuteToPushNotification($users, $notif->notif_count_per_minute);
                 foreach ($usersToPush as $user_id) {
-                    $log_id =  helper::NotificationLog($notif->course_time_id, $user_id);
-                    Notification::send(User::find($user_id), new PushToStudent(route("imPresent")), bcrypt($user_id) ,$log_id );
+                    $log_id = helper::NotificationLog($notif->course_time_id, $user_id, 10);
+                    Notification::send(User::find($user_id), new PushToStudent(route("imPresent")), bcrypt($user_id), $log_id);
                 }
                 present_student_notifRepository::update($notif->id, $usersToPush);
                 presentStudentRepository::store($notif->time, $usersToPush);

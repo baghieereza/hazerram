@@ -27,11 +27,14 @@ class CourseController extends Controller
     /**
      * @param $token
      *
+     * @param $teacher_id
+     * @param $log_id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function changeCourseStatus($token)
+    public function changeCourseStatus($token,$teacher_id,$log_id)
     {
-        $this->course->changeStatus($token);
+        $this->course->changeStatus($token,$teacher_id,$log_id);
          return redirect()->route("home");
     }
 

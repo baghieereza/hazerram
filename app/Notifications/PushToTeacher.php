@@ -41,8 +41,8 @@ class PushToTeacher extends Notification
         return (new WebPushMessage)
             ->title('سامانه حاضرم')
             ->icon('/notification-icon.png')
-            ->body($this->msg)
-            ->action($this->btn, $this->url . "/" . $this->id . "/" . $this->start . "/" . $this->end);
+            ->body('کلاس   تا دقایقی دیگر در حال برگذاری  میباشد . لطفا با کلیک بر روی دکمه کلاس خود را برگذار کنید')
+            ->action( 'برگذاری کلاس', $this->url );
     }
 
 }

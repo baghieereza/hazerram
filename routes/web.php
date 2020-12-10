@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('landingPage.main');
 });
 Route::get('/course_time/{id}', 'HomeController@course_time');
-Route::get('/changeCourseStatus/{token?}', 'CourseController@changeCourseStatus')->name('changeCourseStatus');
+Route::get('/changeCourseStatus/{token?}{teacher_id?}/{log_id?}', 'CourseController@changeCourseStatus')->name('changeCourseStatus');
 Route::get('/imPresent/{id?}/{start?}/{end?}/{log_id?}', 'PushController@imPresent')->name("imPresent");
 Auth::routes();
 
