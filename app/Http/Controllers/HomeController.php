@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\PushDemo;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Course;
@@ -10,6 +11,7 @@ use App\Models\CourseTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Present_student_notif;
+use Notification;
 
 class HomeController extends Controller
 {
@@ -39,7 +41,7 @@ class HomeController extends Controller
             $now = Carbon::now();
             $start = $now->startOfWeek(Carbon::SATURDAY)->toDate();
             $end = $now->endOfWeek(Carbon::WEDNESDAY)->toDate();
-            $week_course_times = CourseTime::with(['present','course'])->whereHas('course', function ($q) {
+            $week_course_times = CourseTime::with(['present', 'course'])->whereHas('course', function ($q) {
                 $q->where('teacher_id', auth()->id());
             })->whereBetween('start_date', [
                 $start,
@@ -58,10 +60,8 @@ class HomeController extends Controller
                 and school.id = class.school_id and school.manager_id = " . auth()->id() . "
                 and school.status = 1 and course_time.start_date BETWEEN '" . now()->toDateString() . " 00:00:00" . "'
                 and '" . now()->toDateString() . " 23:59:59" . "'");
-            foreach ($course_times as $course_time)
-            {
-                foreach ($res as $item)
-                {
+            foreach ($course_times as $course_time) {
+                foreach ($res as $item) {
                     if ($item->id == $course_time->course_id)
                         $course_time->student_count = $item->students->count();
                 }
@@ -69,11 +69,9 @@ class HomeController extends Controller
             $now = Carbon::now();
             $start = $now->startOfWeek(Carbon::SATURDAY)->toDateTimeString();
             $end = $now->endOfWeek(Carbon::WEDNESDAY)->toDateTimeString();
-           $d = $week_course_times_present = School::with('classes.course')->wherehas('classes.course', function ($q) {
-               $q->where('course.id', 1);
-           })->where('school.manager_id', auth()->id())->first();
-
-           dd($d);
+            $d = $week_course_times_present = School::with('classes.course')->wherehas('classes.course', function ($q) {
+                $q->where('course.id', 1);
+            })->where('school.manager_id', auth()->id())->first();
 
 
             $week_course_times = DB::select("select level.name as level_name, course.*, course_time.*, school.*, class.*, course.id as course_id,
@@ -83,7 +81,7 @@ class HomeController extends Controller
                 and course.id = course_time.course_id and class.id = course.class_id
                 and school.id = class.school_id and school.manager_id = " . auth()->id() . "
                 and school.status = 1 and course_time.start_date BETWEEN '" . $start . "' and '" . $end . "'");
-            return view('users.manager', compact('course_times','week_course_times','week_course_times_present'));
+            return view('users.manager', compact('course_times', 'week_course_times', 'week_course_times_present'));
         }
         if (Gate::allows('isAdmin')) {
             $res = Course::with("students")->get();
@@ -96,19 +94,17 @@ class HomeController extends Controller
                 and school.id = class.school_id 
                 and school.status = 1 and course_time.start_date BETWEEN '" . now()->toDateString() . " 00:00:00" . "'
                 and '" . now()->toDateString() . " 23:59:59" . "'");
-            foreach ($course_times as $course_time)
-            {
-                foreach ($res as $item)
-                {
+            foreach ($course_times as $course_time) {
+                foreach ($res as $item) {
                     if ($item->id == $course_time->course_id)
                         $course_time->student_count = $item->students->count();
                 }
             }
 
-            $schools = School::with(['manager' , 'classes.course.course_time.present'])->get();
-            $teachers_count = User::where('role','teacher')->where('status',1)->count();
+            $schools = School::with(['manager', 'classes.course.course_time.present'])->get();
+            $teachers_count = User::where('role', 'teacher')->where('status', 1)->count();
 
-            return view('users.admin',compact('course_times', 'schools','teachers_count'));
+            return view('users.admin', compact('course_times', 'schools', 'teachers_count'));
         }
         if (Gate::allows('isStudent')) {
 
@@ -136,12 +132,12 @@ class HomeController extends Controller
 
     public function course_time($id)
     {
-         $course_time = CourseTime::with(['course.classes.school','present_student_notification'])->where('id',1)->first();
-          $presents = CourseTime::with(['present.course_student' => function($q){
-         $q->orderBy('student_id');
-     },'course.students' => function($q){
-         $q->orderBy('student_id');
-     }])->where('id',1)->first();
-        return view('users.presentList',compact('course_time','presents'));
+        $course_time = CourseTime::with(['course.classes.school', 'present_student_notification'])->where('id', 1)->first();
+        $presents = CourseTime::with(['present.course_student' => function ($q) {
+            $q->orderBy('student_id');
+        }, 'course.students' => function ($q) {
+            $q->orderBy('student_id');
+        }])->where('id', 1)->first();
+        return view('users.presentList', compact('course_time', 'presents'));
     }
 }

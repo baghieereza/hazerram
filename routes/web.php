@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landingPage.main');
 });
 Route::get('/course_time/{id}', 'HomeController@course_time');
 Route::get('/changeCourseStatus/{token?}', 'CourseController@changeCourseStatus')->name('changeCourseStatus');
-
+Route::get('/imPresent/{id?}/{start?}/{end?}/{log_id?}', 'PushController@imPresent')->name("imPresent");
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::post('/push','PushController@store')->name("push");
-Route::get('/push','PushController@push')->name('push');
-Route::get('/logout', 'HomeController@logout')->name('home');
+Route::post('/push', 'PushController@store')->name("push");
+Route::get('/push', 'PushController@push')->name('push');
+Route::get('/logout', 'HomeController@logout')->name('logout');

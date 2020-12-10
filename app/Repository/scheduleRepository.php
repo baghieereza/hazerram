@@ -6,6 +6,8 @@ use App\Http\helper;
 use App\Models\CourseTime;
 use App\Models\User;
 use App\Notifications\PushDemo;
+use App\Notifications\PushToStudent;
+use Illuminate\Routing\Route;
 use Notification;
 
 /**
@@ -26,7 +28,7 @@ class scheduleRepository
         $courses = CourseTime::with("course")->get();
         if (count($courses) > 0) {
             foreach ($courses as $row) {
-                 if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteAfter && $row->status == config('globalVariable.pause')) {
+                if (date('Y-m-d H:i', strtotime($row->start_date)) == $fiveMinuteAfter && $row->status == config('globalVariable.pause')) {
                     $token = courseTimeRepository::saveCourseHashCode($row->course_id);
                     helper::sendSMS('teacher', $row->course->classes->name, $row->course->classes->school->name, route("changeCourseStatus") . "/" . $token, $row->course->teacher->mobile);
                     helper::smsLog($row->course_id, 'teacher', $token, $row->course->teacher_id);
@@ -81,9 +83,12 @@ class scheduleRepository
         $notifications = present_student_notifRepository::get();
         foreach ($notifications as $notif) {
             $users = explode(",", $notif->students_id);
-             if (count($users) > 0 &&  $notif->students_id <> "") {
+            if (count($users) > 0 && $notif->students_id <> "") {
                 $usersToPush = helper::getUsersPerMinuteToPushNotification($users, $notif->notif_count_per_minute);
-                Notification::send(User::whereIn("id", $usersToPush)->get(), new PushDemo);
+                foreach ($usersToPush as $user_id) {
+                    $log_id =  helper::NotificationLog($notif->course_time_id, $user_id);
+                    Notification::send(User::find($user_id), new PushToStudent(route("imPresent")), bcrypt($user_id) ,$log_id );
+                }
                 present_student_notifRepository::update($notif->id, $usersToPush);
                 presentStudentRepository::store($notif->time, $usersToPush);
             } else {
@@ -95,6 +100,7 @@ class scheduleRepository
 
     /**
      * check if course not started send sms to manager
+     *
      * @throws \Exception
      */
     public static function CheckCourseHasNotStarted()

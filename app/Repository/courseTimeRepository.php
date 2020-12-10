@@ -9,7 +9,10 @@ use App\Models\Present_student_notif;
 use App\Models\PresentTeacher;
 use App\Models\Sms_logs;
 use App\Models\User;
+use App\Notifications\PushToManager;
+use App\Notifications\PushToStudent;
 use Illuminate\Support\Facades\Auth;
+use Notification;
 
 /**
  * Class courseTimeRepository
@@ -40,8 +43,8 @@ class courseTimeRepository
     public function changeStatus($token)
     {
         $teacher = Sms_logs::where("token", $token)->first();
-         if ($teacher) {
-            Auth::loginUsingId($teacher->teacher_id , true);
+        if ($teacher) {
+            Auth::loginUsingId($teacher->teacher_id, true);
             $course_time = CourseTime::where("token", $token)->first();
             $course_time->status = config('globalVariable.accepted');
             $course_time->save();
@@ -130,8 +133,10 @@ class courseTimeRepository
                 $courseName = $row->course->name;
                 $date = date('H:i', strtotime($row->end_date)) . "-" . date('H:i', strtotime($row->start_date));
                 $managerNumber = $row->course->classes->school->manager->mobile;
-                helper::sendSMS('managerWarning', $teacherName, $courseName, $date, $managerNumber);
-                helper::smsLog($row->id, 'managerWarning', $fakeToekn, $row->course->classes->school->manager->id);
+                $managerId = $row->course->classes->school->manager->id;
+                Notification::send(User::all(), new PushToManager($courseName, $teacherName, $row->start_date, $row->end_date, $managerNumber));
+//                helper::sendSMS('managerWarning', $teacherName, $courseName, $date, $managerNumber);
+//                helper::smsLog($row->id, 'managerWarning', $fakeToekn, $row->course->classes->school->manager->id);
             }
         }
     }

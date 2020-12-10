@@ -23,4 +23,19 @@ class presentStudentRepository
 
         return true;
     }
+
+    /**
+     * set user to present mode
+     * @param $id
+     * @param $start
+     * @param $end
+     *
+     * @return mixed
+     */
+    public static function modify($id, $start, $end)
+    {
+        return PresentStudent::where("course_student_id", $id)->where("created_at", ">=", $start)->where("created_at", "<=", $end)->update([
+            'is_present' => 1
+        ]);
+    }
 }

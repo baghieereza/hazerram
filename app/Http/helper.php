@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Models\Notification_logs;
 use App\Models\Sms_logs;
 use App\Notifications\InvoicePaid;
 use DateTime;
@@ -56,6 +57,18 @@ class helper
         ]);
     }
 
+    public static function NotificationLog($id, $manager_id)
+    {
+        $log = new Notification_logs();
+        $log->fill([
+            'expire_date' => date("Y-m-d H:i:s", strtotime("+10 sec")),
+            "course_time_id" => $id,
+            "receiver_id" => $manager_id
+        ]);
+        $log->save();
+        return $log->id;
+    }
+
     /**
      * @return string
      * @throws \Exception
@@ -100,7 +113,7 @@ class helper
         $usersTOPush = [];
         for ($i = 0; $i < 1; ++$i) {
             $usersTOPush[] = $users[$i];
-         }
-         return $usersTOPush;
+        }
+        return $usersTOPush;
     }
 }

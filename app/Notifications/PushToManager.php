@@ -10,23 +10,23 @@ use NotificationChannels\WebPush\WebPushChannel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class PushDemo extends Notification
+class PushToManager extends Notification
 {
 
     use Queueable;
-    public $url;
-    public $user_id;
+    public $class;
+    public $teacher;
     public $start;
     public $end;
+    public $tel;
 
-
-    public function __construct($url, $user_id, $start, $end  )
+    public function __construct($class, $teacher, $start, $end, $tel)
     {
-        $this->url = $url;
-        $this->user_id = Hash::make($user_id);
+        $this->class = $class;
+        $this->teacher = $teacher;
         $this->start = $start;
         $this->end = $end;
-
+        $this->tel = $tel;
     }
 
     public function via($notifiable)
@@ -39,8 +39,8 @@ class PushDemo extends Notification
         return (new WebPushMessage)
             ->title('سامانه حاضرم')
             ->icon('/notification-icon.png')
-            ->body('برای ثبت حضور خود بر روی کلیک کنید')
-            ->action('حاضرم', $this->url . "/" . $this->id . "/" . $this->start . "/" . $this->end);
+            ->body("عدم برگذاری کلاس " . $this->class . "  توسط  معلم  " . $this->teacher . "  در تاریخ " . $this->start . " -" . $this->end . " ")
+            ->action('متوجه شدم', "");
     }
 
 }
